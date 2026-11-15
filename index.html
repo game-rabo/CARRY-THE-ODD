@@ -990,7 +990,7 @@ $('mClose').onclick=closeM;addEventListener('keydown',e=>{if(e.code=='Escape')cl
 const FT={trend:'trend',home:'shop',hall:'hall',lab:'shop',cwork:'shop',twork:'shop',dex:'dex',shop:'shop',fr:'fr',trd:'trade2',gate:'gate',egate:'ach',board:'quest',clock:'clock',evst:'ach',evsh:'trade2'};
 function useF(f){openMenu(FT[f.id]||'shop')}
 /* supabase */
-const SBU='https://tgftgxbvoksvljfsqwye.supabase.co/rest/v1/',SBK='sb_publishable_mGzKef4AynwpdYJQ7Zyl9Q_XOJsJcw2';
+const SBU='https://mzykelberuojpgyieiqv.supabase.co/rest/v1/',SBK='sb_publishable_DgxzZQeKj0tz4EELPlNFeg_TH1CcuQD';
 const sb=async(p,m='GET',b,pf)=>{try{const r=await fetch(SBU+p,{method:m,headers:{apikey:SBK,'Content-Type':'application/json',Prefer:pf||'return=representation'},body:b?JSON.stringify(b):undefined});if(!r.ok){let tx='',j={};try{tx=await r.text();j=JSON.parse(tx)}catch(_){}SBL={st:r.status,code:j.code||'',msg:j.message||String(tx).slice(0,140),path:p.split('?')[0],m};throw 0}SBE=0;SBL=null;const t=await r.text();return t?JSON.parse(t):[]}catch(e){if(e!==0)SBL={st:0,code:'',msg:String(e&&e.message||e).slice(0,100),path:p.split('?')[0],m};SBE=1;return null}};
 const FR={fs:[],pend:[],out:[],prof:{},tr:[]},nmP=id=>FR.prof[id]?FR.prof[id].name:'???';let TP=null,pn=0;
 const pushProf=()=>sb('profiles?on_conflict=id','POST',{id:S.uid,code:S.code,name:S.name,lv:S.lv,updated_at:new Date().toISOString()},'resolution=merge-duplicates,return=minimal');

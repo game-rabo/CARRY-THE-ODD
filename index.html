@@ -441,8 +441,16 @@ function bx(g,w,h,d,c,x,y,z,o={}){const k=c+(o.e||0)+(o.a||1),gk=w+'_'+h+'_'+d;l
 /* ---------- world ---------- */
 function MT(d0,x,z){const d=d0-25,b=d<95?0:d<150?(d-95)*.69:d<190?38:Math.max(0,(235-d)*.84);return b*(1+.2*Math.sin(x*.09+1)*Math.cos(z*.08)+.12*Math.sin((x-z)*.045))}
 function ZH2(zi,x,z){const d=Math.hypot(x,z),m=Math.min(1,Math.max(0,(d-12)/16)),e=-Math.max(0,d-72)*3;if(zi==9)return m*Math.round(Math.sin(x*.05)*3+Math.cos(z*.05)*3)*1.6+e;if(zi==10)return m*(Math.abs(Math.sin(x*.12))*5+Math.cos(z*.1)*2)+e;if(zi==11)return m*Math.sin(x*.09)*Math.sin(z*.09)*6+e;return m*(Math.sin(x*.05)*5+Math.cos(z*.07)*4+Math.sin((x+z)*.1)*2)+e}
-const BH=68,cheb=(x,z)=>Math.max(Math.abs(x),Math.abs(z)),areaOf=(x,z)=>x>800?Math.round(x/500)+1:Math.hypot(x,z)<100?0:x>=0?1:2,AN=['草原エリア','森林エリア','遺跡エリア','祭りの街','雪の世界','天空島','海底洞窟','星間宇宙','異界の森','雲海の頂','溶岩の祭殿','水晶の群島','星墓の終端','虹のネオン遊園地'];
-function ZH(zi,x,z){if(zi>8)return ZH2(zi,x,z);const d=Math.hypot(x,z),m=Math.min(1,Math.max(0,(d-12)/16));if(zi==3)return m*(Math.sin(x*.08)*1.2+Math.cos(z*.09)*1.2);if(zi==4)return m*(Math.sin(x*.07)*4+Math.cos(z*.06)*4+Math.sin((x+z)*.04)*3)+Math.max(0,d-80)*.6;return m*(Math.sin(x*.1)*2+Math.cos(z*.09)*2)-Math.max(0,d-72)*3}
+const BKA=(lx,z)=>{const d=Math.hypot(lx,z);if(d<26)return 14;return Math.abs(z)>Math.abs(lx)?(z<0?15:17):(lx>0?16:18)};
+const BH=68,cheb=(x,z)=>Math.max(Math.abs(x),Math.abs(z)),areaOf=(x,z)=>x>800?(Math.round(x/500)==13?BKA(x-6500,z):Math.round(x/500)+1):Math.hypot(x,z)<100?0:x>=0?1:2,AN=['草原エリア','森林エリア','遺跡エリア','祭りの街','雪の世界','天空島','海底洞窟','星間宇宙','異界の森','雲海の頂','溶岩の祭殿','水晶の群島','星墓の終端','虹のネオン遊園地','山の裏・中央の里','山の裏・北の氷瀑谷','山の裏・東の朝焼け竹林','山の裏・南の湯けむり郷','山の裏・西の黄昏渓谷'];
+function ZH14(x,z){const d=Math.hypot(x,z)||1,u=x/d,v=z/d,m=Math.min(1,Math.max(0,(d-22)/20)),
+ wN=Math.pow(Math.max(0,-v),2),wE=Math.pow(Math.max(0,u),2),wS=Math.pow(Math.max(0,v),2),wW=Math.pow(Math.max(0,-u),2),sw=wN+wE+wS+wW||1,
+ hN=Math.abs(Math.sin(x*.11+z*.05))*5+Math.cos(z*.09)*2+Math.max(0,d-30)*.1,
+ hE=Math.sin(x*.07)*3+Math.cos(z*.08)*3+Math.sin((x+z)*.1)*1.5,
+ hS=Math.cos(z*.1)*1.2-Math.abs(Math.sin(x*.09))*1.5+Math.sin(z*.18)*1.2,
+ hW=Math.tanh(Math.sin(x*.06)*2+Math.cos(z*.05)*2)*4+Math.sin((x+z)*.03)*2;
+ return m*(hN*wN+hE*wE+hS*wS+hW*wW)/sw-Math.max(0,d-96)*3}
+function ZH(zi,x,z){if(zi==14)return ZH14(x,z);if(zi>8)return ZH2(zi,x,z);const d=Math.hypot(x,z),m=Math.min(1,Math.max(0,(d-12)/16));if(zi==3)return m*(Math.sin(x*.08)*1.2+Math.cos(z*.09)*1.2);if(zi==4)return m*(Math.sin(x*.07)*4+Math.cos(z*.06)*4+Math.sin((x+z)*.04)*3)+Math.max(0,d-80)*.6;return m*(Math.sin(x*.1)*2+Math.cos(z*.09)*2)-Math.max(0,d-72)*3}
 function H(x,z){if(x>300)return x<800?0:ZH(Math.round(x/500)+1,x-Math.round(x/500)*500,z);const d=Math.hypot(x,z),m=Math.min(1,Math.max(0,(cheb(x,z)-BH-2)/22));return m*(Math.sin(x*.06)*2.5+Math.cos(z*.07)*2.5+Math.sin((x+z)*.035)*3+Math.sin(x*.13)*Math.cos(z*.11)*1.2)+MT(d,x,z)}
 {const G=new THREE.PlaneGeometry(520,520,260,260);G.rotateX(-Math.PI/2);const p=G.attributes.position,cl=new Float32Array(p.count*3),C=new THREE.Color(),base=['#5be04a','#25c25a','#d9b48a'];
 for(let i=0;i<p.count;i++){const x=p.getX(i),z=p.getZ(i);p.setY(i,H(x,z));C.set(cheb(x,z)<BH?'#d9cfae':base[areaOf(x,z)]);if(Math.hypot(x,z)>90){const y=p.getY(i);if(y>18)C.set('#ffffff');else if(y>9)C.set('#a98cf5')}C.offsetHSL(0,.05,(Math.random()-.5)*.03+(((Math.floor(x/8)+Math.floor(z/8))&1)?.05:-.02));cl.set([C.r,C.g,C.b],i*3)}
@@ -512,7 +520,7 @@ let CR=[],EN=[];
 const P={pos:new V3(0,0,5),vy:0,face:Math.PI,kx:0,kz:0,gr:true,rep:-1,cd:[0,0,0,0],tool:0,walk:0};
 let T=100,yaw=0,yawM=0,pitch=.6,cargo=[],fly=[],DUR=100,cartBrk=false,fx=[];
 const ph=()=>{const t=T%1200;return t<360?0:t<600?1:t<960?2:3};
-function spawnC(){if(net.on&&!net.host)return;const[x0,z]=rp(curZ?12:34,curZ?70:150),x=x0+ZC[curZ],a=(curZ==0&&H(x,z)>18?99:areaOf(x,z)),p=ph(),c=((EA()>=0&&Math.random()<.3)?SP.filter(s=>s.ev===EA()):SP.filter(s=>s.ar.includes(a)&&s.t.includes(p)&&tierOk(s))).filter(s=>left(s)>0&&(s.r>0||s.ev!=null||COM.has(s.id)));if(!c.length||Math.hypot(x-P.pos.x,z-P.pos.z)<14)return;let w=c.reduce((s,q)=>s+wt(q),0)*Math.random(),sp=c[0];for(const q of c){w-=wt(q);if(w<=0){sp=q;break}}
+function spawnC(){if(net.on&&!net.host)return;const[x0,z]=rp(curZ?12:34,curZ==14?96:curZ?70:150),x=x0+ZC[curZ],a=(curZ==0&&H(x,z)>18?99:areaOf(x,z)),p=ph(),c=((EA()>=0&&Math.random()<.3)?SP.filter(s=>s.ev===EA()):SP.filter(s=>s.ar.includes(a)&&s.t.includes(p)&&tierOk(s))).filter(s=>left(s)>0&&(s.r>0||s.ev!=null||COM.has(s.id)));if(!c.length||Math.hypot(x-P.pos.x,z-P.pos.z)<14)return;let w=c.reduce((s,q)=>s+wt(q),0)*Math.random(),sp=c[0];for(const q of c){w-=wt(q);if(w<=0){sp=q;break}}
  if(Math.random()>Math.min(1,ACC[sp.r]*(sp.r>=2?1+.35*(S.reb|0):1)))return;mkCR(sp,x,z,pickMu(),''+(++UID))}
 let UID=0;function mkCR(sp,x,z,mu,u){const m=mk(sp);applyMu(m.g,mu);m.h.position.set(x,H(x,z),z);scene.add(m.h);const c={...m,x0:x,z0:z,ph:Math.random()*9,ang:Math.random()*6,ann:0,seen:0,mu,u};CR.push(c);return c}
 function dist2(a,b,c,d){return Math.hypot(a-c,b-d)}
@@ -538,7 +546,7 @@ const slotG=n=>{n=Math.max(1,Math.min(n,30));const ly=n>9?2:1,per=Math.ceil(n/ly
 function mkE(){const g=new THREE.Group(),i=new THREE.Group();bx(i,1.3,1.3,1.3,'#2a1d3a',0,.9,0);for(let k=0;k<8;k++)bx(i,.3,.3+Math.random()*.4,.3,'#5b3a85',(Math.random()-.5)*1.2,1.6,(Math.random()-.5)*1.2);[-.3,.3].forEach(s=>bx(i,.25,.2,.08,'#ff3b3b',s,1.05,.66,{e:'#f00'}));bx(i,.7,.15,.08,'#ff3b3b',0,.6,.66,{e:'#a00'});g.add(i);
  const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:EX,depthTest:false}));sp.scale.set(1.6,1.6,1);sp.position.y=3;sp.visible=false;g.add(sp);return{h:g,g:i,ex:sp,st:'idle',t:0,cd:0,dir:Math.random()*6,vx:0,vz:0,hit:0}}
 const EX=(()=>{const c=document.createElement('canvas');c.width=c.height=64;const x=c.getContext('2d');x.font='900 56px sans-serif';x.textAlign='center';x.fillStyle='#ff3b3b';x.strokeStyle='#111';x.lineWidth=7;x.strokeText('!',32,52);x.fillText('!',32,52);return new THREE.CanvasTexture(c)})();
-function spawnE(){const[x0,z]=rp(curZ?16:36,curZ?70:130),x=x0+ZC[curZ];if(dist2(x,z,P.pos.x,P.pos.z)<25)return;const e=mkE();e.h.position.set(x,H(x,z),z);scene.add(e.h);EN.push(e)}
+function spawnE(){const[x0,z]=rp(curZ?16:36,curZ==14?96:curZ?70:130),x=x0+ZC[curZ];if(dist2(x,z,P.pos.x,P.pos.z)<25)return;const e=mkE();e.h.position.set(x,H(x,z),z);scene.add(e.h);EN.push(e)}
 /* input */
 const K={},J={x:0,y:0};let jid=null,cid=null,lx=0,ly=0;
 addEventListener('keydown',e=>{K[e.code]=1;if(e.code=='KeyE')col();if(e.code=='KeyF')useTool();if(e.code=='Tab'){e.preventDefault();openMenu('dex')}if(e.code=='Digit1')selT(0);if(e.code=='Digit2')selT(1)});addEventListener('keyup',e=>K[e.code]=0);
@@ -688,7 +696,7 @@ function addC(k){invDirty=1;const[id,mu]=k.split('/'),nw=!S.dx[id];S.dx[id]=1;S.
 function remC(k){invDirty=1;const[id,mu]=k.split('/');if(!S.owned[id]||(mu&&!S.mut[k]))return 0;if(mu&&!--S.mut[k])delete S.mut[k];if(!--S.owned[id])delete S.owned[id];return 1}
 const nmK=k=>{const[id,mu]=k.split('/');return(mu?MU.find(x=>x.id==mu).n:'')+SP.find(q=>q.id==id).n};
 function itemKeys(){const a=Object.keys(S.mut);for(const id in S.owned){const m=Object.keys(S.mut).filter(k=>k.startsWith(id+'/')).reduce((q,k)=>q+S.mut[k],0);if(S.owned[id]-m>0)a.push(id)}return a}
-function register(){let TOT=0;const L=[],rb=GM()*(1+.25*S.reb)*(EV()?1.5:1)*(1+.12*(S.rs.cb|0)),p2=ph();cargo.forEach(c=>{const sp=c.sp,k=c.mu?sp.id+'/'+c.mu:sp.id;cart.remove(c.h);const nw=addC(k),gb=(nw&&sp.r>=3)?setTimeout(()=>banner(`🏅 栄光+${GP[sp.r]}！ 報酬+${GL()}% 積載+${Math.floor(GL()/6)}`,RC[sp.r]),1200):0,mm=c.mu?MU.find(x=>x.id==c.mu).m:1,co=Math.round([10,25,60,150,400,1000,3000][sp.r]*(nw?2:1)*mm*rb),dt=(sp.r+1)*(nw?3:1)*mm;S.coins+=co;TOT+=co;S.data+=dt;S.xp+=Math.round((sp.r+1)*15*(nw?2:1)*mm*(1+.15*(S.rs.xpb|0)));S.st.reg++;if(sp.r>=2)S.st.rare=(S.st.rare|0)+1;if(nw)S.st.nw=(S.st.nw|0)+1;if(p2>1)S.st.nrg++;if(c.mu)S.st.mut++;L.push(`<div style="color:${c.mu?MC[c.mu]:RC[sp.r]};font-size:22px">${nw?'✦NEW✦ ':''}${nmK(k)} <span style="font-size:15px;color:#fff">🪙+${co} 🔬+${dt}</span></div>`)});
+function register(){let TOT=0;const L=[],rb=GM()*(1+.25*S.reb)*(EV()?1.5:1)*(1+.12*(S.rs.cb|0)),p2=ph();cargo.forEach(c=>{const sp=c.sp,k=c.mu?sp.id+'/'+c.mu:sp.id;cart.remove(c.h);const nw=addC(k),gb=(nw&&sp.r>=3)?setTimeout(()=>banner(`🏅 栄光+${GP[sp.r]}！ 報酬+${GL()}% 積載+${Math.floor(GL()/6)}`,RC[sp.r]),1200):0,mm=c.mu?MU.find(x=>x.id==c.mu).m:1,co=Math.round([10,30,90,350,1500,7000,35000][sp.r]*(nw?2:1)*mm*rb),dt=[1,2,4,8,16,32,64][sp.r]*(nw?3:1)*mm;S.coins+=co;TOT+=co;S.data+=dt;S.xp+=Math.round((sp.r+1)*15*(nw?2:1)*mm*(1+.15*(S.rs.xpb|0)));S.st.reg++;if(sp.r>=2)S.st.rare=(S.st.rare|0)+1;if(nw)S.st.nw=(S.st.nw|0)+1;if(p2>1)S.st.nrg++;if(c.mu)S.st.mut++;L.push(`<div style="color:${c.mu?MC[c.mu]:RC[sp.r]};font-size:22px">${nw?'✦NEW✦ ':''}${nmK(k)} <span style="font-size:15px;color:#fff">🪙+${co} 🔬+${dt}</span></div>`)});
  const DI2=cargo.length?dispBonus(TOT):0;S.coins+=DI2;if(DI2)L.push(`<div style="font-size:19px;color:#ffd34d;margin-top:6px">🖼 展示ボーナス 🪙+${DI2}</div>`);cargo=[];DUR=DURS[S.durLv];cartBrk=false;save();rebuildDisp();$('rl').innerHTML='<div style="font-size:30px">帰還成功！</div>'+L.join('');$('rew').style.display='flex';arp([523,659,784,1047])}
 $('rOk').onclick=()=>{$('rew').style.display='none';snd(700,.1,'square',.05)};
 /* ---------- menu ---------- */
@@ -794,6 +802,7 @@ function xloop(dt,t,p){
 
 /* ===== v2: zones / HUD dock / minimap / friends+trade (Supabase) / facilities ===== */
 const ZC=[0,0,0,1000,1500,2000,2500,3000,3500,4000,4500,5000,5500,6000],ZLV=[1,1,1,3,5,7,9,11,13,22,28,34,40,48],ZSK=[0,0,0,0xffb3d9,0xcfe8ff,0x9fd8ff,0x14607a,0x070718,0x3a1050,0xdff2ff,0x4a1208,0x0e3a5a,0x02020c,0xff8ad8],ZGC=[0,0,0,'#e8a0c0','#eef6ff','#b8e6ff','#c9b27a','#25254a','#4a2060','#f4f0ff','#3a1a1a','#7fd0e0','#1a1030','#ff9ae0'],ZDC=[0,0,0,['#ff6b9a','#ffd34d'],['#2f7a5a','#fff'],['#fff','#d6f0ff'],['#ff7a6a','#4cd0c0'],['#6a6a9a','#b58bff'],['#9a3acb','#40ffd0'],['#fff','#ffd34d'],['#5a2a1a','#ff6a2a'],['#7fe0ff','#e8fcff'],['#4a3a7a','#40ffd0'],['#7a3cff','#ffe14d']];
+ZC[14]=6500;ZSK[14]=0xffcf9a;ZGC[14]='#d9c9a0';ZDC[14]=['#8a6a4a','#ffd34d'];const PX=0,PZ=-226,BKLV=12;let BKCD=0;
 let curZ=0,nearF=null,SBE=0,SBL=null;
 /* ===== +30 species (festival / spirit / cosmic / silly / machine) ===== */
 const sph=(g,r,c,cx,cy,cz,s=.5,o)=>{if(window.__voxSph)return window.__voxSph(g,r,c,cx,cy,cz,s,o);for(let x=-r;x<=r;x++)for(let y=-r;y<=r;y++)for(let z=-r;z<=r;z++)if(x*x+y*y+z*z<=r*r+.5)bx(g,s,s,s,typeof c=='function'?c(x,y,z):c,cx+x*s,cy+y*s,cz+z*s,o)};
@@ -1000,6 +1009,38 @@ for(let zi=3;zi<=13;zi++){const g=new THREE.Group(),cx=ZC[zi],G=new THREE.PlaneG
  G.setAttribute('color',new THREE.BufferAttribute(cl,3));G.computeVertexNormals();const m=new THREE.Mesh(G,new THREE.MeshLambertMaterial({vertexColors:true,flatShading:true}));m.position.x=cx;g.add(m);
  for(let i=0;i<80;i++){const a=Math.random()*6.283,d=14+Math.random()*66,x=cx+Math.cos(a)*d,z=Math.sin(a)*d,h=1.5+Math.random()*5,w=.8+Math.random(),q=new THREE.Group();bx(q,w,h,w,ZDC[zi][0],0,h/2,0);bx(q,w*1.4,.5,w*1.4,ZDC[zi][1],0,h+.2,0,{e:zi>=7?ZDC[zi][1]:0});q.position.set(x,H(x,z),z);q.rotation.y=Math.random()*6;g.add(q);obs.push({x,z,r:w*.9})}
  bx(g,5,.3,5,'#3aa0ff',cx,.2,0,{a:.6,e:'#3aa0ff'});bx(g,.6,12,.6,'#7fd0ff',cx,6,0,{a:.5,e:'#3aa0ff'});lb(g,'基地へ戻る',cx,8,0);{const w=new THREE.Mesh(new THREE.CylinderGeometry(78,78,70,40,1,true),WM);w.position.set(cx,15,0);g.add(w)}g.visible=false;scene.add(g);ZG[zi]=g}
+
+/* ===== B19: 山の裏側ステージ（五方：中央・北・東・南・西） ===== */
+{const cx=6500,g=new THREE.Group(),G=new THREE.PlaneGeometry(220,220,80,80);G.rotateX(-Math.PI/2);
+ const p=G.attributes.position,cl=new Float32Array(p.count*3),C=new THREE.Color(),SC=['#d9c9a0','#eaf6ff','#8fd07a','#e8b88a','#d9825a'];
+ for(let i=0;i<p.count;i++){const lx=p.getX(i),lz=p.getZ(i);p.setY(i,H(cx+lx,lz));C.set(SC[BKA(lx,lz)-14]);C.offsetHSL(0,0,(Math.random()-.5)*.08);cl.set([C.r,C.g,C.b],i*3)}
+ G.setAttribute('color',new THREE.BufferAttribute(cl,3));G.computeVertexNormals();const m=new THREE.Mesh(G,new THREE.MeshLambertMaterial({vertexColors:true,flatShading:true}));m.position.x=cx;g.add(m);
+ const prop=(sc,x,z)=>{const q=new THREE.Group(),r=Math.random();let w=1;
+  if(sc==15){const h=3+Math.random()*8;bx(q,1.1,h,1.1,'#bfefff',0,h/2,0,{a:.85,e:'#4aa8ff'});bx(q,.7,h*.6,.7,'#e8fcff',.9,h*.3,.4,{a:.85});bx(q,2.4,.5,2.4,'#ffffff',0,.25,0);w=1.4}
+  else if(sc==16){for(let k=0;k<4;k++){const h=6+Math.random()*6,ox=(Math.random()-.5)*2.4,oz=(Math.random()-.5)*2.4;bx(q,.35,h,.35,'#5fbf4a',ox,h/2,oz);bx(q,.42,.18,.42,'#2f7a2a',ox,h*.35,oz);bx(q,.42,.18,.42,'#2f7a2a',ox,h*.7,oz)}if(r<.25)bx(q,.8,1,.8,'#ff4a3a',0,2,0,{e:'#ff3a2a'});w=1.3}
+  else if(sc==17){bx(q,3.4,.5,3.4,'#6b7480',0,.25,0);bx(q,2.8,.2,2.8,'#4cd0e0',0,.55,0,{a:.7,e:'#2ab0c0'});bx(q,.6,2+Math.random()*2,.6,'#ffffff',0,2.2,0,{a:.35});if(r<.5)bx(q,1,1.4,1,'#8a4a2a',1.8,.7,1.2);w=2}
+  else if(sc==18){const h=4+Math.random()*9;bx(q,2.6,h,2.6,'#c0623a',0,h/2,0);bx(q,3.2,.6,3.2,'#e08a5a',0,h*.55,0);bx(q,3,.5,3,'#8a4228',0,h+.2,0);bx(q,.5,.9,.5,'#c07aff',1.2,h+.7,0,{e:'#9a3aff'});w=1.8}
+  else{bx(q,3,2.2,3,'#e9dcc0',0,1.1,0);bx(q,3.8,.5,3.8,'#a8452a',0,2.5,0);bx(q,2.6,.5,2.6,'#a8452a',0,3,0);bx(q,2,.4,2,'#a8452a',0,3.4,0);bx(q,.7,1.1,.1,'#7a4a2a',0,.6,1.55);bx(q,.5,.5,.1,'#ffd34d',1,1.4,1.55,{e:'#fb0'});w=2.2}
+  q.position.set(x,H(x,z),z);q.rotation.y=Math.random()*6;g.add(q);obs.push({x,z,r:w})};
+ for(let k=0;k<9;k++){const a=k/9*6.283+.3;prop(14,cx+Math.cos(a)*17,Math.sin(a)*17)}
+ for(let i=0;i<150;i++){const a=Math.random()*6.283,d=30+Math.random()*66,lx=Math.cos(a)*d,z=Math.sin(a)*d;prop(BKA(lx,z),cx+lx,z)}
+ [[0,-62,'北の氷瀑谷','#7fd0ff'],[62,0,'東の竹林','#7be36b'],[0,62,'南の湯郷','#ff9bd6'],[-62,0,'西の黄昏谷','#ff9a4a']].forEach(([lx,z,nm,c])=>{const x=cx+lx,y=H(x,z);bx(g,3,.6,3,'#555a66',x,y+.3,z);bx(g,.9,16,.9,c,x,y+8,z,{a:.45,e:c});bx(g,1.6,1.6,1.6,'#ffffff',x,y+16.5,z,{e:c});lb(g,nm,x,y+20,z)});
+ [-3.5,3.5].forEach(sx=>bx(g,.8,7,.8,'#d9342f',cx+sx,3.5,-9));bx(g,9,.8,1,'#d9342f',cx,7.2,-9);bx(g,10,.4,1.4,'#2a2a2a',cx,7.8,-9);
+ bx(g,5,.3,5,'#3aa0ff',cx,.2,0,{a:.6,e:'#3aa0ff'});bx(g,.6,12,.6,'#7fd0ff',cx,6,0,{a:.5,e:'#3aa0ff'});lb(g,'山の表へ戻る',cx,8,0);lb(g,'山裏の里',cx,11,-9);
+ {const w=new THREE.Mesh(new THREE.CylinderGeometry(104,104,80,48,1,true),WM);w.position.set(cx,18,0);g.add(w)}
+ g.visible=false;scene.add(g);ZG[14]=g}
+/* 山奥の裏口（ここから山の反対側へ） */
+{const B=new THREE.Group(),y=Math.max(H(PX,PZ),H(PX-4.7,PZ-2.5),H(PX+4.7,PZ-2.5),H(PX-4.7,PZ+2.5),H(PX+4.7,PZ+2.5));B.position.set(PX,y,PZ);scene.add(B);
+ bx(B,9,10,5,'#5b5f6a',0,-4.5,0);bx(B,9,1,5,'#6b6f7a',0,.5,0);bx(B,9.4,.3,5.4,'#ffd34d',0,1.05,0,{e:'#fb0'});
+ [-3.2,3.2].forEach(sx=>{bx(B,1.6,11,1.6,'#8c8575',sx,6.5,0);bx(B,2.2,.8,2.2,'#ffd34d',sx,1.4,0);bx(B,1,1,1,'#7ff6ff',sx,12.3,0,{e:'#0aa'})});
+ bx(B,9,1.6,1.8,'#8c8575',0,12.2,0);bx(B,9.4,.4,2.1,'#ffd34d',0,13.2,0,{e:'#fb0'});
+ const sw=new THREE.Mesh(new THREE.BoxGeometry(5.2,10,.3),new THREE.MeshBasicMaterial({color:0x7ff6ff,transparent:true,opacity:.5,fog:false}));sw.position.set(0,6.6,0);B.add(sw);
+ const bm=new THREE.Mesh(new THREE.CylinderGeometry(1.6,1.6,100,16,1,true),new THREE.MeshBasicMaterial({color:0x7ff6ff,transparent:true,opacity:.22,depthWrite:false,fog:false,side:2}));bm.position.y=50;B.add(bm);
+ lb(B,'山の裏口',0,16,0);
+ setInterval(()=>{sw.material.opacity=.4+Math.sin(Date.now()/300)*.15;bm.rotation.y+=.02},50)}
+setInterval(()=>{if(curZ!=0||vis||document.hidden||$('title').style.display!='none'||Date.now()<BKCD)return;
+ if(Math.hypot(P.pos.x-PX,P.pos.z-PZ)<4.5){BKCD=Date.now()+4000;if(S.lv<BKLV){toast('🔒 山の裏側は Lv'+BKLV+' から行けます');return}S.st.zv=(S.st.zv|0)+1;warp(14,6500,22)}},250);
+{const _bb3=buildBase;buildBase=function(g,bl,reb,own=1){const r=_bb3(g,bl,reb,own);if(own)FB.push({x:PX,z:PZ,n:'山の裏口',r:6});return r}}
 function warp(k,x,z){curZ=k;CR.forEach(c=>scene.remove(c.h));EN.forEach(e=>scene.remove(e.h));CR=[];EN=[];for(const i in ZG)ZG[i].visible=(i==k);P.pos.set(x,H(x,z)+.1,z);P.vy=0;cp.set(x,0,z+4);closeM();banner(AN[k||areaOf(x,z)],'#fff');snd(600,.3,'triangle',.08,500);for(let i=0;i<10;i++)spawnC();for(let i=0;i<4;i++)spawnE()}
 function closeM(){$('modal').classList.remove('on');snd(400,.1)}
 /* dock */
@@ -1026,7 +1067,7 @@ const TT={dex:'📖 図鑑',shop:'🔨 工房・基地強化',ach:'🏆 実績�
 const _tab=tab,allK=()=>[...new Set([...Object.keys(S.mut),...Object.keys(S.owned)])];
 tab=function(t){if(t=='net')t='fr';if(t=='trade')t='trade2';curTab=t;$('mt').textContent=TT[t]||'メニュー';const m=$('mc');let h='';
  if(t=='hall'){const sel=(S.dm?S.disp:dispK()).slice(0,dsN());h=H2('展示 '+sel.length+'/'+dsN()+'体<br>'+SM('帰還のたびに🪙を稼ぎます（目安 +'+dispRaw()+'／運んだ量で上限）'),B2('おまかせ','hauto',null,null,'c'))+H2('展示数は♻再生でのみ増えます<br>'+SM('次の再生で '+dsN()+'→'+DSLOTS[Math.min((S.reb|0)+1,DSLOTS.length-1)]+'体'),'')+(allK().map(k=>H2(nmK(k),B2(sel.includes(k)?'外す':'展示','hd',k,null,sel.includes(k)?'r':'g'))).join('')||'<div>まだキャラがいません</div>')}
- else if(t=='gate'){h=AN.map((n,i)=>H2(`${n}<br>${SM('必要 Lv'+ZLV[i])}`,S.lv>=ZLV[i]?B2('行く','go',i):`<b>🔒Lv${ZLV[i]}</b>`)).join('')}
+ else if(t=='gate'){h=AN.slice(0,14).map((n,i)=>H2(`${n}<br>${SM('必要 Lv'+ZLV[i])}`,S.lv>=ZLV[i]?B2('行く','go',i):`<b>🔒Lv${ZLV[i]}</b>`)).join('')}
  else if(t=='quest'){h=H2('毎回の探索に目標を！'+'<br>'+SM('達成すると🪙と経験値'),'')+S.q.map((q,i)=>{const p=Math.min(q.g,(S.st[q.k]|0)-q.b);return H2(`${q.n} ${p}/${q.g}<br>${SM('🪙'+q.r)}`,p>=q.g?B2('受取','qc',i):'')}).join('')}
  else if(t=='clock'){h=H2(`現在 ${PN[ph()]}<br>${SM('1回 🪙50')}`,'')+PN.map((n,i)=>H2(n,B2('進める','ck',i,null,'c'))).join('')}
  else if(t=='fr'){h=H2(`あなた: ${S.name}<br>${SM('フレンドコード')} <b style="color:#ffd34d;font-size:20px">${S.code}</b>`,'')+H2(`名前 <input id="nm" class="in" value="${S.name}" maxlength="8">`,B2('保存','fname',null,null,'c'))+H2('<input id="fc" class="in" placeholder="相手のコード">',B2('申請','fadd',null,null,'c'));
@@ -1069,7 +1110,7 @@ function drawMM(){const W=224,c=W/2,k=c/62,cy=Math.cos(yaw),sy=Math.sin(yaw),X=(
  const lo=18*(S.lv-1)**2,hi=18*S.lv**2;$('lvt').textContent='Lv'+S.lv;$('xp').style.width=Math.min(100,(S.xp-lo)/(hi-lo)*100)+'%';
  nearF=null;if(curZ==0&&!vis)for(const f of FB)if(f.id&&(!f.ev||EV()||EA()>=0)&&Math.hypot(f.x-P.pos.x,f.z-P.pos.z)<f.r+1.5){nearF=f;break}
  const n=near();$('bAct').style.display=nearF&&!n&&P.rep<0&&!$('modal').classList.contains('on')?'block':'none';if(nearF)$('bAct').textContent=nearF.n+'　操作';
- if(curZ&&Math.hypot(P.pos.x-ZC[curZ],P.pos.z)<4)warp(0,0,14);
+ if(curZ&&Math.hypot(P.pos.x-ZC[curZ],P.pos.z)<4){if(curZ==14){BKCD=Date.now()+4000;warp(0,PX*.95,PZ*.95)}else warp(0,0,14)}
  if(++mmT%2==0)drawMM()})();
 
 
@@ -1111,12 +1152,16 @@ const EVT=[
 {n:'🎆 夏花火大祭',sky:0x7fd8ff,pal:['#ff4d6d','#ffd34d','#6fd6ff'],pc:'#ffd34d',o:'ハナビリュウ,ウチワ頭,ヤタイ武者,カキ氷ぼう,ヤグラ塔,ハナビ輪,ホタル天使,ミコシ車,ヨイヤミ霊,ヒマワリ獅子',s:'ナツ・ライリュウ,ヒマワリ頭の怪人,花火師の将軍,スイカ神,大花火ヤグラ,夏至リング,入道雲の鳳凰,神輿タンク,海坊主の姫,夏獅子・神楽'},
 {n:'🍁 月見紅葉祭',sky:0xffb27a,pal:['#ff8a1f','#c0392b','#ffe98a'],pc:'#ff8a1f',o:'モミジリュウ,ススキ頭,コガラシ武者,クリまるさん,ツキミ塔,ツキミ輪,カラス天使,イモ車,カボチャ霊,タヌキ獣',s:'ジュウゴヤ・リュウ,ランタン頭の怪人,紅葉の将軍,ツキミ兎神,満月ヤグラ,秋分リング,金の鳳凰,収穫祭タンク,彼岸花の姫,狐火・神楽'},
 {n:'🎄 白銀の聖夜',sky:0xcfe8ff,pal:['#9fe8ff','#ffffff','#d9342f'],pc:'#ffffff',o:'コオリリュウ,ゆきだるま頭,フユ騎士,ケーキまるさん,ツリー塔,オーロラ輪,ユキ天使,ソリ車,ユキオンナ霊,トナカイ獣',s:'ヒョウガ・リュウ,プレゼント頭の怪人,聖夜の将軍,サンタ神,クリスタル塔,極夜リング,氷晶の鳳凰,雪原戦車,雪女王,白狼・神楽'},
-{n:'🐉 竜神祭',sky:0x9a7bff,pal:['#18f0d0','#ffd34d','#b58bff'],pc:'#18f0d0',o:'リュウジン,ドラ頭,ホウリュウ武者,タマゴまるさん,リュウグウ塔,リュウ輪,ハネリュウ天使,リュウ車,リュウ霊,キリン獣',s:'ゴッド・ドラゴン,ドラゴン頭の怪人,竜王の将軍,天竜神,龍宮ヤグラ,竜巻リング,雷の鳳凰,竜戦車,竜骨の姫,麒麟・神楽'}];
+{n:'🐉 竜神祭',sky:0x9a7bff,pal:['#18f0d0','#ffd34d','#b58bff'],pc:'#18f0d0',o:'リュウジン,ドラ頭,ホウリュウ武者,タマゴまるさん,リュウグウ塔,リュウ輪,ハネリュウ天使,リュウ車,リュウ霊,キリン獣',s:'ゴッド・ドラゴン,ドラゴン頭の怪人,竜王の将軍,天竜神,龍宮ヤグラ,竜巻リング,雷の鳳凰,竜戦車,竜骨の姫,麒麟・神楽'},
+{n:'🌊 海開き大祭',sky:0x6fe0ff,pal:['#2ab8ff','#ffffff','#ffd34d'],pc:'#6fe0ff',o:'ウミリュウ,浮き輪頭,ナミノリ武者,スイカまるさん,灯台塔,シーサイド輪,カモメ天使,ビーチ車,シオカゼ霊,イルカ獣',s:'ダイカイ・リュウ,シュノーケル頭の怪人,大波の将軍,海神ポセイ丸,潮騒ヤグラ,満潮リング,朝凪の鳳凰,波乗りタンク,人魚の姫,蒼海・神楽'},
+{n:'🎃 ハロウィン夜会',sky:0xb58ad0,pal:['#ff8a1f','#b06aff','#3a2a4a'],pc:'#ff8a1f',o:'ヤミリュウ,カボチャ頭,コウモリ武者,キャンディまるさん,ゴースト塔,月夜輪,ホウキ天使,カボチャ馬車,ランタン霊,黒猫獣',s:'ハロウィン・リュウ,ジャックの怪人,闇夜の将軍,魔女神,大カボチャヤグラ,満月リング,蝙蝠の鳳凰,棺桶タンク,吸血鬼の姫,黒猫・神楽'},
+{n:'🎋 星降る七夕',sky:0xa8b8ff,pal:['#ffe45c','#7ff6ff','#b58bff'],pc:'#ffe45c',o:'ホシリュウ,短冊頭,ヒコボシ武者,ササまるさん,天の川塔,星屑輪,オリヒメ天使,星船車,ホタル霊,シカ獣',s:'ミルキー・リュウ,織姫の怪人,彦星の将軍,天帝神,星河ヤグラ,七夕リング,天の鳳凰,星屑タンク,かささぎの姫,星鹿・神楽'}];
 const T10=[7,8,9,0,1,2,3,4,5,6],OR=[3,3,4,1,2,3,3,2,3,4],KD=['空を翔ける竜。','異形の頭を持つ怪人。','刃を掲げる孤高の戦士。','祭りの空気を背負うマスコット。','祝祭の塔。','天を巡る飾りの輪。','空を舞う翼。','祭りの乗り物。','夜を漂う霊。','祭りの獣。'];
 EVT.forEach((e,ei)=>{const on=e.o.split(','),sn=e.s.split(',');for(let j=0;j<20;j++){const sec=j>=10,i=j%10,p=e.pal,q=sec?i+1:i,C=[p[q%3],p[(q+1)%3],p[(q+2)%3],ei*2+(sec?1:0)],r=sec?6:OR[i];SP.push({id:'e'+ei+'_'+j,n:(sec?on:on)&&(sec?sn:on)[i],r,ar:[],t:[0,1,2,3],ev:ei,h:e.n+'限定（開催中だけ出現）',d:e.n+'限定'+(sec?'シークレット':'キャラ')+'。'+KD[i],b(g){TPL[T10[i]](g,C);ext(g,r,C[1])},i(g,t){TI[T10[i]](g,t);extA(g,t)}})}});
-const EA=()=>S.evoff?-1:S.evx>=0?S.evx:(w=>w<5?w:-1)(Math.floor(Date.now()/604800000)%6);
-NA.evx=()=>{const v=S.evx>=0?S.evx:-1;S.evx=v>=4?-1:v+1};
-const _t4=tab;tab=function(t){_t4(t);if(t=='set'||t=='ach'){const m=$('mc'),e=EA();m.insertAdjacentHTML('afterbegin',H2(`🎪 開催中: ${e>=0?EVT[e].n:'なし'}<br>${SM('限定キャラ20体（シークレット10体）／毎週入れ替わり')}`,''));m.querySelectorAll('[data-a]').forEach(b=>b.onclick=()=>act(b.dataset.a,b.dataset.v,b.dataset.w))}};
+const ESL=216e5,ELT=()=>Date.now()-new Date().getTimezoneOffset()*6e4,ERM=()=>ESL-ELT()%ESL,EHM=ms=>Math.floor(ms/36e5)+'時間'+String(Math.floor(ms%36e5/6e4)).padStart(2,'0')+'分';
+const EA=()=>S.evoff?-1:S.evx>=0?S.evx:Math.floor(ELT()/ESL)%EVT.length;
+NA.evx=()=>{const v=S.evx>=0?S.evx:-1;S.evx=v>=EVT.length-1?-1:v+1};
+const _t4=tab;tab=function(t){_t4(t);if(t=='set'||t=='ach'){const m=$('mc'),e=EA();m.insertAdjacentHTML('afterbegin',H2(`🎪 開催中: ${e>=0?EVT[e].n:'なし'}<br>${SM('限定キャラ各20体（シークレット10体）／6時間ごとに入れ替わり（全${EVT.length}種）')}`,''));m.querySelectorAll('[data-a]').forEach(b=>b.onclick=()=>act(b.dataset.a,b.dataset.v,b.dataset.w))}};
 /* sky decor */
 const SKY=new THREE.Group(),SKA=[];scene.add(SKY);
 const sk=(g,x,y,z,k,v=0)=>{g.position.set(x,y,z);SKY.add(g);SKA.push({g,k,v,x,y,z})};
@@ -1165,6 +1210,10 @@ const NS=[['ミネヤマ小僧',1,[13],0,'#e8eef5','#9aa7b8','#ff9a3a','hs'],['�
 ['ほし墓ぼうず',1,[12],2,'#cfcfe8','#6a6a9a','#222','s'],['骨の山車',2,[12],3,'#f2ecd8','#9a8a6a','#5a3a2a','ek'],['墓守ランタン',2,[12],1,'#5a4a7a','#ffd34d','#222','f'],['星屑ガイコツ馬',3,[12],0,'#f2ecd8','#b58bff','#40ffd0','hsm'],['無月のカラス傘',3,[12],0,'#2a2040','#b58bff','#ffd34d','wo'],['虚空の鐘',4,[12],1,'#2a1a4a','#40ffd0','#b58bff','cormo'],['亡霊オーケストラ',5,[12],5,'#e8e0ff','#9a3acb','#40ffd0','oamr'],['終焉の星冠',6,[12],5,'#0a0a22','#b58bff','#ffd34d','cokamr'],
 ['ひょっこりカギ',1,[0,1],3,'#ffd34d','#fff','#ff7a3a','s'],['きこり釜',2,[1],1,'#7a4f2a','#52c25c','#ffd34d','s'],['遺跡のつみき神',3,[2],5,'#a39b8a','#5fa05a','#ffd34d','cah'],['飴細工ししまい',3,[3],0,'#ff9bd6','#ffd34d','#fff','hos'],['鏡餅タワー',2,[4],1,'#fff','#ffb347','#d9342f','sc'],['風船列車',3,[5],3,'#ff6b7a','#fff','#4aa8ff','wke'],['ネオン缶ダイバー',4,[6],3,'#18f0d0','#ff4fd0','#fff','rxm'],['ロケット団子',4,[7],2,'#b58bff','#ffd34d','#fff','rkm'],['提灯デーモン',5,[8],5,'#3a1050','#ff4fd0','#40ffd0','hfcao'],['大福神殿',6,[0,1,2,3,4,5],1,'#fff','#ffd34d','#ff6bd6','cormoa']];
 NS.forEach((q,i)=>{const[n,r,ar,sh,c1,c2,c3,F]=q;SP.push({id:'nx'+i,n,r,ar,t:i>=32&&i<40?[2,3]:[0,1,2,3],h:ar[0]>12?'山頂付近':AN[ar[0]],d:'',b(g){nxB(g,sh,r,c1,c2,c3,F)},i(g,t){g.position.y=Math.sin(t*2+i)*.1;if(g.userData.Q)g.userData.Q.rotation.y=t*.9}})});
+const NS2=[["ちゃぶ台モグ",1,[14],2,"#e9dcc0","#a8452a","#ffd34d","h","里の家をまわるちゃぶ台のモグラ。ご飯の匂いに敏感。"],["提灯ほおずき",2,[14],1,"#ff7a3a","#ffd34d","#7a2a0a","fo","夕暮れになるとぽっと灯る小さな提灯。"],["縁側ネコマタ",2,[14],0,"#f2ede0","#9a7a5a","#ff9bd6","se","縁側で日向ぼっこをする二股のしっぽの猫。"],["湯呑みの精",3,[14],3,"#cfe9d0","#ffffff","#4cd0c0","oa","里の湯呑みから生まれた、あたたかいお茶の精。"],["里の鳥居番",3,[14],1,"#d9342f","#2a2a2a","#ffd34d","cok","山の裏の入口を守る朱色の番人。"],["囲炉裏ドラゴン",4,[14],5,"#8a4a2a","#ff7a2a","#ffe36b","fchs","囲炉裏の火から目を覚ました小さな竜。"],["山裏の大蔵守",5,[14],1,"#e8dcb0","#ffd34d","#a8452a","corma","里の宝物蔵をひとりで守る大きな守り神。"],["月見里の宵神",6,[14],5,"#2a1d4a","#ffd34d","#fff6c0","cokamr","山の端に月が見えない夜だけ現れる幻の神。"],["つらら坊や",1,[15],2,"#e8fcff","#7fd0ff","#ffffff","x","谷の崖からぶら下がるつららの子ども。"],["氷瀑ペンギン",2,[15],0,"#2a4a8a","#ffffff","#ff9a3a","we","凍った滝をすべり台にして遊ぶペンギン。"],["雪見だいふくろう",3,[15],3,"#ffffff","#cfe8ff","#ffb347","wh","雪の夜にまんまるになって眠るふくろう。"],["凍結ヤクモチ",2,[15],2,"#bfefff","#ffffff","#4aa8ff","hsx","ひんやり固い、氷のヤク。"],["ふぶき番傘",3,[15],1,"#9fd0ff","#ffffff","#2a6ae0","wo","吹雪の中でくるくる回る番傘のお化け。"],["氷柱ゴーレム",4,[15],5,"#7ff6ff","#e8fcff","#4aa8ff","xchs","谷の氷柱が集まって動き出した巨人。"],["瀑布の氷龍",5,[15],3,"#cfeaff","#4aa8ff","#ffffff","wxcoa","凍った大瀑布の奥で眠る、透きとおった龍。"],["白嶺の雪女帝",6,[15],1,"#ffffff","#b58bff","#7ff6ff","cokamr","北の谷をおさめる、雪と氷の女帝。"],["たけのこ小僧",1,[16],2,"#e8d9a0","#5fbf4a","#7a5a2a","h","雨上がりにぽこっと顔を出す小僧。"],["笹舟カワウソ",2,[16],0,"#a87a4a","#5fbf4a","#ffffff","ws","笹の舟に乗って竹林の小川を下るカワウソ。"],["朝露ホタル",2,[16],3,"#bfffb0","#ffffff","#ffe36b","wf","朝露のなかでだけ光る、昼のホタル。"],["竹槍ししおどし",3,[16],1,"#5fbf4a","#e8d9a0","#2f7a2a","ska","カポーンと鳴らして敵を追い払う竹の仕掛け。"],["朝焼けキツネ火",3,[16],0,"#ff9a6a","#ffd34d","#ffffff","hfw","朝焼けの色をした、ふわふわのキツネ火。"],["竹林の鐘つき",4,[16],5,"#3f8f3a","#ffd34d","#e8d9a0","cors","朝いちばんに竹林へ鐘を響かせる大男。"],["旭日の風車神",5,[16],3,"#ffb347","#ff6a2a","#ffffff","wcroa","朝日とともに回りだす風車の神様。"],["東雲の竜胆姫",6,[16],1,"#ff9bd6","#7ff6ff","#ffd34d","cokamr","夜明けの空から舞い降りる、りんどうの姫。"],["ゆげポコ",1,[17],2,"#ffffff","#cfe8ff","#ff9bd6","s","温泉の湯けむりがぽこっと固まった子。"],["湯けむりカピ",2,[17],0,"#c08a5a","#ffffff","#7a4a2a","se","頭にタオルをのせて湯に浸かるカピバラ。"],["のぼせダルマ",2,[17],2,"#ff6a5a","#ffffff","#222222","hc","長湯しすぎて真っ赤になったダルマ。"],["温泉まんじゅう船",3,[17],3,"#e8c08a","#ffffff","#7a4a2a","kw","湯けむりの上をふわふわ進むまんじゅうの船。"],["間欠泉クジラ",3,[17],0,"#4cd0e0","#ffffff","#2a8ae0","wro","地面から潮を吹き上げる、湯の中のクジラ。"],["火の見やぐらカニ",4,[17],1,"#ff7a3a","#ffd34d","#5a1a0a","ekfc","やぐらを背負って温泉街を見まわるカニ。"],["源泉の湯守神",5,[17],5,"#7fe0ff","#ffd34d","#ffffff","ocxma","湧き出る源泉を見守る、あたたかい神様。"],["地熱の大天狗",6,[17],1,"#d9342f","#ffe36b","#2a1a1a","cohfam","大地の熱を団扇であおぐ、南の郷の大天狗。"],["ちぎれ雲ラクダ",1,[18],0,"#e8b88a","#ffffff","#ff9a6a","h","夕空のちぎれ雲みたいなラクダ。"],["赤岩ポスト",2,[18],2,"#c0623a","#e08a5a","#ffffff","s","渓谷の岩に埋まっている赤い郵便ポスト。"],["夕霧カラス",2,[18],3,"#3a2a4a","#ff9a6a","#ffd34d","wo","夕霧の中から現れて、キラキラ光る物を集めるカラス。"],["砂時計ゴーレム",3,[18],1,"#e08a5a","#ffd34d","#8a4228","sxa","体の中の砂が落ちきると、動きを止める岩の巨人。"],["黄昏ランプ売り",3,[18],0,"#7a3a6a","#ffd34d","#ff7a3a","fk","夕暮れになると渓谷に現れるランプ売り。"],["断崖の風車竜",4,[18],5,"#c0623a","#ffffff","#7ff6ff","wchs","断崖の風を翼にためて飛ぶ竜。"],["夕凪の砂海クジラ",5,[18],3,"#e8b88a","#9a3acb","#ffd34d","wrcom","風が止まる夕凪の時間にだけ砂の海を泳ぐクジラ。"],["黄昏の玉座",6,[18],1,"#4a2060","#ff9a6a","#ffe36b","cokamrf","渓谷の奥で、誰かが座るのを待ち続けている玉座。"]];
+NS2.forEach((q,i)=>{const[n,r,ar,sh,c1,c2,c3,F,d]=q;SP.push({id:'bk'+i,n,r,ar,t:r>=6?[2,3]:[0,1,2,3],h:AN[ar[0]].replace('エリア','')+' / '+(r>=6?'夜・深夜':'一日中'),d,b(g){nxB(g,sh,r,c1,c2,c3,F)},i(g,t){g.position.y=Math.sin(t*2+i)*.1;if(g.userData.Q)g.userData.Q.rotation.y=t*.9}})});
+const NS3=[["ピラミッちゃん",1,[2],1,"#d9c9a0","#8a7a5a","#5fa05a","h","ちいさな三角の遺跡の子。砂の上をころころ転がる。"],["石板カメレオ",2,[2],3,"#a39b8a","#6a6a5a","#ffd34d","s","石板の模様に化けて隠れるのが得意。"],["古代コインゴーレム",3,[2],2,"#c9a86a","#7a5a3a","#4cd0c0","sk","古い金貨を体中に貼りつけた遺跡の番人。"],["王家の砂時計獣",4,[2],0,"#d9c9a0","#8a7a5a","#5fa05a","cwr","逆さにすると時が戻ると噂の獣。"],["遺跡の太陽王",5,[2],5,"#a39b8a","#6a6a5a","#ffd34d","coam","崩れた神殿で今も日の出を待つ王。"],["金魚すくいまる",1,[3],2,"#ff6b8a","#ffd34d","#ffffff","x","ポイを破るのが大好きな小さな金魚。"],["わた雲ちょうちん",2,[3],3,"#6fd6ff","#ffffff","#ff9a3c","fh","ふわふわの綿菓子でできた提灯。"],["綿菓子ヤタイ",3,[3],1,"#b58bff","#ffe45c","#ff4d6d","os","屋台ごと歩き回る甘い匂いの塔。"],["盆踊りフクロウ",4,[3],0,"#ff6b8a","#ffd34d","#ffffff","cwa","夜通し羽を広げて輪になって踊る。"],["夜店の大神輿",5,[3],5,"#6fd6ff","#ffffff","#ff9a3c","ckroa","街じゅうの夜店を背負って練り歩く大神輿。"],["ゆきうさ丸",1,[4],0,"#e8fcff","#9fd0ff","#ffffff","h","雪玉のように丸いうさぎ。耳だけ赤い。"],["こたつペンギン",2,[4],3,"#cfe4ff","#7a9ac0","#ff7a7a","ow","こたつから出てこない冬眠系ペンギン。"],["かまくらクマ",3,[4],2,"#ffffff","#bfe9ff","#4aa8ff","hs","かまくらを背負って雪原をのっそり歩く。"],["吹雪のオオカミ",4,[4],0,"#e8fcff","#9fd0ff","#ffffff","cx","遠吠えで吹雪を呼ぶ白い狼。"],["雪原の氷帝",5,[4],5,"#cfe4ff","#7a9ac0","#ff7a7a","cmoa","氷の城の奥で雪を降らせ続ける皇帝。"],["浮き島もぐら",1,[5],2,"#fff6d6","#9fd0ff","#7be36b","h","小さな浮き島を掘って暮らすモグラ。"],["ふうせんヒツジ",2,[5],0,"#e8f4ff","#ffd34d","#4aa8ff","o","ふくらむと空へ飛んでいく雲のヒツジ。"],["風車スズメ",3,[5],1,"#c8f0c0","#fff","#ff9bd6","wa","羽ばたくと小さな風車が回る。"],["空島の雷鳥",4,[5],0,"#fff6d6","#9fd0ff","#7be36b","cwx","雷を羽にためて島の間を渡る鳥。"],["天空の羽衣神",5,[5],5,"#e8f4ff","#ffd34d","#4aa8ff","coam","羽衣をなびかせ島々を見守る神。"],["ヒトデ丸",1,[6],3,"#3a8ae0","#aeeaff","#ff7ab0","s","岩にぺたっと張りつく星形の子。"],["貝殻ヤドカリ王",2,[6],2,"#2a6a9a","#7fe0ff","#ffd34d","hc","自慢の貝殻の冠をかぶったヤドカリ。"],["提灯アンコウ",3,[6],0,"#5a3a8a","#bfefff","#4cd0c0","fo","暗い洞窟で光る提灯を揺らす。"],["洞窟のクラゲ姫",4,[6],1,"#3a8ae0","#aeeaff","#ff7ab0","xrm","ゆらゆら漂い洞窟を照らす姫。"],["深海の灯台主",5,[6],5,"#2a6a9a","#7fe0ff","#ffd34d","cfora","洞窟の最奥で光を守り続ける主。"],["ほしくずウサギ",1,[7],0,"#2a2f5a","#b58bff","#ffe45c","h","星のかけらを食べて跳ねるウサギ。"],["隕石タートル",2,[7],3,"#3a3a7a","#7ff6ff","#ff6bd6","s","背中の隕石は大事な宝物。"],["衛星ねこ",3,[7],0,"#1a1f3a","#ffffff","#9fd0ff","ro","月のまわりをくるくる回る猫。"],["彗星のキツネ",4,[7],0,"#2a2f5a","#b58bff","#ffe45c","cwf","長い尾を引いて宇宙を駆けるキツネ。"],["銀河の旅人",6,[7],5,"#3a3a7a","#7ff6ff","#ff6bd6","cwrom","星々を旅して歌を集める幻の旅人。"],["きのこ提灯",1,[8],1,"#7a4aa0","#52c25c","#ffd34d","f","頭のきのこがぽっと光る。"],["苔むしカエル",2,[8],0,"#4a8a6a","#b58bff","#ffffff","s","苔でふかふかのカエル。"],["ふくろう仙人",3,[8],5,"#2a5a4a","#7ff6a0","#ff9bd6","hs","森の知恵を数百年ためこんだ仙人。"],["ほたる鹿",4,[8],0,"#7a4aa0","#52c25c","#ffd34d","hxm","角に無数のほたるを宿した鹿。"],["異界の森の主",5,[8],5,"#4a8a6a","#b58bff","#ffffff","chorm","迷い込んだ者を静かに見つめる森の主。"],["雲ひつじ丸",1,[9],2,"#ffffff","#ffc8e8","#7be3ff","h","ちぎれ雲そっくりの子ひつじ。"],["朝焼けハト",2,[9],0,"#e8f4ff","#ffd34d","#ff7ab0","wo","朝一番に雲海を染める鳩。"],["虹わたりリス",3,[9],0,"#d8e8ff","#ffffff","#b58bff","wr","虹の橋を渡るのが日課のリス。"],["天空鏡ガメ",4,[9],3,"#ffffff","#ffc8e8","#7be3ff","cro","甲羅で空を映す大きな亀。"],["雲頂の龍",5,[9],5,"#e8f4ff","#ffd34d","#ff7ab0","cwma","雲海の頂で雷雲を従える龍。"],["マグマおにぎり",1,[10],2,"#ff6a2a","#ffd34d","#5a1a0a","f","熱々のごはんでできた火山の子。"],["火山ガラス亀",2,[10],3,"#8a3a1a","#ff6a2a","#ffe36b","s","黒い甲羅がきらりと割れる。"],["溶岩サラマンダー",3,[10],0,"#2a2230","#ff5a2a","#ffd34d","fx","溶岩の川を泳ぐトカゲ。"],["噴煙の鬼",4,[10],5,"#ff6a2a","#ffd34d","#5a1a0a","chk","煙を吐きながら地ならしする鬼。"],["紅蓮の祭殿主",5,[10],5,"#8a3a1a","#ff6a2a","#ffe36b","cfora","祭殿の炎を絶やさない主。"],["水晶こぞう",1,[11],1,"#aeeaff","#ffffff","#3aa0ff","h","頭の水晶が光る小さな修行僧。"],["プリズムイルカ",2,[11],0,"#bfefff","#ff9bd6","#fff","wx","ジャンプすると七色の水しぶき。"],["氷晶ハリネズミ",3,[11],2,"#7fd0e0","#e8fcff","#b58bff","s","針がぜんぶ氷の結晶のハリネズミ。"],["虹彩のクラゲ",4,[11],0,"#aeeaff","#ffffff","#3aa0ff","xrm","触手がオーロラのように光る。"],["水晶宮の女王",5,[11],5,"#bfefff","#ff9bd6","#fff","cworm","群島の底の宮殿を治める女王。"],["ほし灯り",1,[12],2,"#cfcfe8","#6a6a9a","#ffe45c","f","墓石の上でちらちら揺れる小さな灯。"],["墓石ひよこ",2,[12],3,"#5a4a7a","#ffd34d","#cfcfe8","h","墓石の殻から生まれたひよこ。"],["夜行の骨太鼓",3,[12],1,"#2a2a4a","#9fd0ff","#ffffff","sk","夜だけ鳴りだす骨の太鼓。"],["月影の騎士",4,[12],5,"#cfcfe8","#6a6a9a","#ffe45c","chxa","月の影から現れる静かな騎士。"],["星墓の大王",6,[12],5,"#5a4a7a","#ffd34d","#cfcfe8","ckcmoa","終端の墓に眠る星々の大王。"],["ネオンわたあめ",1,[13],2,"#ff6bd6","#7ff6ff","#ffe45c","x","虹色に光る綿菓子の子。"],["メリーゴーラウンドロバ",2,[13],0,"#b58bff","#ffe45c","#ff4d6d","ro","ぐるぐる回りながら歩くロバ。"],["観覧車ハムスター",3,[13],1,"#7ff6ff","#ff6bd6","#ffffff","rs","観覧車をゆっくり回す働き者。"],["ジェットコースター竜",4,[13],0,"#ff6bd6","#7ff6ff","#ffe45c","cwk","宙返りしながら空を駆ける竜。"],["ネオンの帝王",6,[13],5,"#b58bff","#ffe45c","#ff4d6d","ckcmoa","遊園地の光をすべて操る帝王。"]];
+NS3.forEach((q,i)=>{const[n,r,ar,sh,c1,c2,c3,F,d]=q;SP.push({id:'nz'+i,n,r,ar,t:r>=6?[2,3]:[0,1,2,3],h:AN[ar[0]].replace('エリア','')+' / '+(r>=6?'夜・深夜':'一日中'),d,b(g){nxB(g,sh,r,c1,c2,c3,F)},i(g,t){g.position.y=Math.sin(t*2+i)*.1;if(g.userData.Q)g.userData.Q.rotation.y=t*.9}})});
 
 /* ===== VOXEL MODE : 全キャラをボクセル(立方体グリッド)化 =====
    bx() を差し替え → 箱は「表面だけのボクセル面」に分割され、1マスごとに明暗がズレて立方体の格子が見える。滑らかな面・球・多角形はなし */
@@ -1443,7 +1492,7 @@ function upUI(){const p=ph(),f=(T%1200)/1200,w=92,h=34;dg.setTransform(DPRX,0,0,
  if(!night){dg.fillStyle='#ff9a3a';for(let i=0;i<8;i++){const a=i*Math.PI/4+f*3;dg.beginPath();dg.moveTo(x+Math.cos(a-.28)*5.5,y+Math.sin(a-.28)*5.5);dg.lineTo(x+Math.cos(a)*9,y+Math.sin(a)*9);dg.lineTo(x+Math.cos(a+.28)*5.5,y+Math.sin(a+.28)*5.5);dg.fill()}dg.fillStyle=p==1?'#ff8a4a':'#ffd34d';dg.beginPath();dg.arc(x,y,5.6,0,7);dg.fill();dg.stroke();dg.fillStyle='#151515';dg.fillRect(x-2.6,y-1,1.4,1.8);dg.fillRect(x+1.2,y-1,1.4,1.8)}
  else{dg.fillStyle='#f6efb0';dg.beginPath();dg.arc(x,y,5.6,.7,5.6);dg.arc(x+3.2,y-1.8,4.6,5.2,1,true);dg.closePath();dg.fill();dg.stroke()}
  dg.restore();dg.strokeStyle='#151515';dg.lineWidth=2;dg.beginPath();dg.moveTo(8,1);dg.arcTo(w-1,1,w-1,h-1,8);dg.arcTo(w-1,h-1,1,h-1,8);dg.arcTo(1,h-1,1,1,8);dg.arcTo(1,1,w-1,1,8);dg.closePath();dg.stroke();
- const e=EA();if(e>=0){const rem=604800000-Date.now()%604800000;evb.style.display='block';evb.innerHTML=String(EVT[e].n).replace(EMO,'')+' 残'+Math.floor(rem/864e5)+'日'+Math.floor(rem%864e5/36e5)+'時間<u style="width:'+Math.round((1-rem/604800000)*100)+'%"></u>'}else evb.style.display='none';
+ const e=EA();if(e>=0){const rem=ERM();evb.style.display='block';evb.innerHTML=String(EVT[e].n).replace(EMO,'')+' 残'+EHM(rem)+'<u style="width:'+Math.round((1-rem/ESL)*100)+'%"></u>'}else evb.style.display='none';
  ob.style.top='calc('+(e>=0?132:100)+'px + env(safe-area-inset-top))'}
 function objUI(){if(vis||S.st.reg>=2||$('title').style.display!='none'){ob.style.display='none';return}ob.style.display='flex';let tx=null,tz=0,t='';
  if(cartBrk&&P.rep<0){t='乗り物に近づいて「修理」';tx=cp.x;tz=cp.z}
@@ -1492,7 +1541,7 @@ const _bb=buildBase;buildBase=function(g,bl,reb,own=1){const r=_bb(g,bl,reb,own)
 setInterval(()=>{if(RW)RW.rotation.y+=.015;if(AH)AH.rotation.y+=.04},40);
 /* ===== 大釜 & ラッキーブロック ===== */
 let LBK=null,CLD=null,CLG=null,CLL=null,CLS=1,CRES='',CAUB=0,CZB=0,fb6=0,CZ=[];
-const LKP=100000;
+const LKP=50000;
 function luckFac(g){
  const c=new THREE.Group();c.position.set(-24,0,-50);c.scale.setScalar(1.5);g.add(c);CLG=c;[[-24,-50],[24,-50]].forEach(([x,z])=>{bx(g,13,.3,13,'#8d8a80',x,.15,z);bx(g,11.6,.34,11.6,'#d9cfae',x,.17,z);bx(g,13.6,.2,13.6,'#ffd34d',x,.1,z,{e:'#fb0'})});sph(c,2,'#23262e',0,1.5,0,.55);ringB(c,16,1.3,'#3a3f4a',2.55,.3);bx(c,2.2,.15,2.2,'#7fff7f',0,2.5,0,{e:'#3f3'});
  [[.7,.7],[-.7,.7],[0,-.9]].forEach(([x,z])=>{bx(c,.5,.4,.5,'#23262e',x,.2,z);bx(c,.45,.7,.45,'#ff8a1f',x*.9,.35,z*.9,{e:'#f60'});bx(c,.25,.5,.25,'#ffe45c',x*.9,.6,z*.9,{e:'#fb0'})});
@@ -1513,7 +1562,7 @@ const rrs=r=>SP.filter(q=>q.r==r&&q.ev==null&&left(q)>0),
  grantS=sp=>{const nw=addC(sp.id);S.wc[sp.id]=(S.wc[sp.id]|0)+1;S.seen[sp.id]=1;save();return nw},
  rollW=W=>{let w=W.reduce((a,x)=>a+x[1],0)*Math.random();for(const[x,p]of W){w-=p;if(w<=0)return x}return W[0][0]},
  cardH=(sp,nw)=>`<div class="up" style="justify-content:center;text-align:center"><div><div style="font-size:13px;color:${RC[sp.r]}">${RN[sp.r]}${nw?' ✨NEW':''}</div><b style="font-size:22px">${sp.n}</b></div></div>`;
-function luckT(m,res){m.innerHTML=`<div class="sm">10万コインでラッキーブロックを買って割ると、レアキャラが必ず出る！</div><div class="up"><div>ラッキーブロック<br><span class="sm">Rare 52% / Epic 30% / Legendary 12% / Mythic 5% / Secret 1%</span></div><button class="b g" id="lkb">🪙${LKP}</button></div><div class="sm">所持 🪙${Math.floor(S.coins)}</div><div id="lkr">${res||''}</div>`;
+function luckT(m,res){m.innerHTML=`<div class="sm">5万コインでラッキーブロックを買って割ると、レアキャラが必ず出る！</div><div class="up"><div>ラッキーブロック<br><span class="sm">Rare 52% / Epic 30% / Legendary 12% / Mythic 5% / Secret 1%</span></div><button class="b g" id="lkb">🪙${LKP}</button></div><div class="sm">所持 🪙${Math.floor(S.coins)}</div><div id="lkr">${res||''}</div>`;
  $('lkb').onclick=()=>{if(!pay(LKP))return;const sp=pickR(rollW([[2,52],[3,30],[4,12],[5,5],[6,1]]));if(!sp){S.coins+=LKP;toast('今は出せるキャラがいません');return}$('lkb').disabled=true;let i=0;const el=$('lkr');
   const tm=setInterval(()=>{const q=SP[Math.floor(Math.random()*SP.length)];if(el&&el.isConnected)el.innerHTML=`<div class="sm" style="font-size:18px">${q.n}？</div>`;if(++i>=12){clearInterval(tm);const nw=grantS(sp);if(m.isConnected)luckT(m,cardH(sp,nw));arp([523,659,784,1047]);if(sp.r>=4)banner(`ラッキーブロックから ${sp.n}！`,RC[sp.r])}},90)}}
 function czCss(){if($('czcss'))return;const s=document.createElement('style');s.id='czcss';s.textContent=`.czs{position:relative;height:178px;margin:4px 0 8px;border:3px solid #151515;border-radius:16px;overflow:hidden;background:radial-gradient(ellipse at 50% 100%,rgba(255,140,40,.55),rgba(30,20,60,.95) 62%);-webkit-text-stroke:0}
@@ -1599,8 +1648,8 @@ $('bTi').onpointerdown=()=>openMenu('ti');
 const WP=[['ホーム',-9,-12],['話題ステージ',0,-44],['キャラ展示ギャラリー',0,-29],['大釜',-24,-43],['ラッキーブロック',24,-43],['展示ホール',-42,-22],['研究所',-42,-6],['ルーレット広場',-44,-42],['星の祭壇',44,-42],['流星祭ステージ',42,-22],['星屋台',42,40],['ショップ',42,24]];
 NA.wp=i=>{if(curZ||vis)return toast('基地の中だけ使えます');const w=WP[+i];P.pos.set(w[1],0,w[2]);P.vy=0;cp.set(w[1],0,w[2]+4);closeM();banner(w[0]+' へワープ','#fff');snd(700,.25,'triangle',.08,500)};
 NA.egd=()=>{const d=new Date().toDateString();if(S.egd==d||!(EV()||EA()>=0))return;S.egd=d;S.coins+=300;S.data+=15;S.star+=1;arp([659,880,1175,1568])};
-function egT(m){const e=EA(),on=EV()||e>=0,d=new Date().toDateString(),rem=604800000-Date.now()%604800000;
- let h=H2(`${on?(e>=0?EVT[e].n:'流星祭')+' 開催中':'イベントは開催されていません'}<br>${SM(on?'残り '+Math.floor(rem/864e5)+'日 / 報酬+50% 変異率1.8倍 限定キャラ出現':'設定でイベント開催をONにできます')}`,'')
+function egT(m){const e=EA(),on=EV()||e>=0,d=new Date().toDateString(),rem=ERM();
+ let h=H2(`${on?(e>=0?EVT[e].n:'流星祭')+' 開催中':'イベントは開催されていません'}<br>${SM(on?'次の入れ替わりまで '+EHM(rem)+' / 報酬+50% 変異率1.8倍 限定キャラ出現':'設定でイベント開催をONにできます')}`,'')
  +H2(`ゲート通行ボーナス<br>${SM('開催中は1日1回、コイン300・データ15・スター1')}`,on&&S.egd!=d?B2('受取','egd'):`<b>${on?'済':'休止'}</b>`)
  +`<div style="margin:10px 0 4px;font-size:17px">イベント会場へワープ</div>`+WP.map((w,i)=>H2(w[0],B2('ワープ','wp',i,null,'c'))).join('')
  +`<div style="margin:10px 0 4px;font-size:17px">ショートカット</div>`+H2('ルーレット',`<button class="b g" onclick="openMenu('roul')">開く</button>`)+H2('星の祭壇',`<button class="b g" onclick="openMenu('altar')">開く</button>`)+H2('コインキャッチ',`<button class="b g" onclick="openMenu('mini')">開く</button>`)+H2('実績・称号',`<button class="b g" onclick="openMenu('ach')">開く</button>`);
@@ -1660,10 +1709,10 @@ function loop(now){requestAnimationFrame(loop);const dt=Math.min(.05,(now-last)/
  let ix=J.x+((K.KeyD||K.ArrowRight)?1:0)-((K.KeyA||K.ArrowLeft)?1:0),iy=J.y+((K.KeyS||K.ArrowDown)?1:0)-((K.KeyW||K.ArrowUp)?1:0);const il=Math.hypot(ix,iy);if(il>1){ix/=il;iy/=il}
  const df=cartBrk?.55:DUR>60?1:DUR>30?.8:.55,sp=P.rep>=0?0:7*df*(DASH?1.75:1)*(1+.1*S.reb)*(1+.08*(S.spdLv|0))*(Date.now()<(window.__bf||0)?1.35:1)*(1+Math.min(.25,GL()*.004))*(cargo.length||fly.length?1:1.1);
  if(cid==null&&iy<-.15&&Math.abs(ix)>.12)yaw+=Math.atan2(Math.sin(P.face+Math.PI-yaw),Math.cos(P.face+Math.PI-yaw))*Math.min(1,dt*1.5)*Math.min(1,Math.abs(ix)*1.3);const act0=Math.hypot(ix,iy)>.1;yawM=yaw;const mx=ix*Math.cos(yawM)+iy*Math.sin(yawM),mz=-ix*Math.sin(yawM)+iy*Math.cos(yawM);
- P.pos.x+=(mx*sp+P.kx)*dt;P.pos.z+=(mz*sp+P.kz)*dt;P.kx*=.9;P.kz*=.9;if(!vis){const c0=ZC[curZ]||0,rx=P.pos.x-c0,q=Math.hypot(rx,P.pos.z),RW=curZ?76:237;if(q>RW){P.pos.x=c0+rx*RW/q;P.pos.z*=RW/q}}
+ P.pos.x+=(mx*sp+P.kx)*dt;P.pos.z+=(mz*sp+P.kz)*dt;P.kx*=.9;P.kz*=.9;if(!vis){const c0=ZC[curZ]||0,rx=P.pos.x-c0,q=Math.hypot(rx,P.pos.z),RW=curZ==14?98:curZ?76:237;if(q>RW){P.pos.x=c0+rx*RW/q;P.pos.z*=RW/q}}
  if(Math.hypot(ix,iy)>.1&&P.rep<0){const f=Math.atan2(mx,mz);let d=f-P.face;d=Math.atan2(Math.sin(d),Math.cos(d));P.face+=d*Math.min(1,dt*12);P.walk+=dt*10*Math.hypot(ix,iy);stp+=dt;if(stp>.34&&P.gr){stp=0;snd(90+Math.random()*30,.06,'triangle',.05)}}
  for(const arr of[obs,DOB])for(const o of arr){const dx=P.pos.x-o.x,dz=P.pos.z-o.z,d=Math.hypot(dx,dz),m=o.r+.5;if(d<m&&d>.01){P.pos.x=o.x+dx/d*m;P.pos.z=o.z+dz/d*m}}
- const rd=Math.hypot(P.pos.x,P.pos.z);if(!vis){const cx=P.pos.x>800?ZC[Math.round(P.pos.x/500)+1]:0,lx=P.pos.x-cx,ld=Math.hypot(lx,P.pos.z),mx=cx?(cx==2000?74:86):239;if(ld>mx){P.pos.x=cx+lx*mx/ld;P.pos.z*=mx/ld}}
+ const rd=Math.hypot(P.pos.x,P.pos.z);if(!vis){const cx=P.pos.x>800?ZC[Math.round(P.pos.x/500)+1]:0,lx=P.pos.x-cx,ld=Math.hypot(lx,P.pos.z),mx=cx?(cx==2000?74:cx==6500?100:86):239;if(ld>mx){P.pos.x=cx+lx*mx/ld;P.pos.z*=mx/ld}}
  const gh=H(P.pos.x,P.pos.z);P.vy-=24*dt;P.pos.y+=P.vy*dt;if(P.pos.y<=gh){P.pos.y=gh;P.vy=0;if(!P.gr)snd(120,.08,'sine',.06);P.gr=true}else if(P.pos.y>gh+.15)P.gr=false;
  pl.position.copy(P.pos);pl.rotation.y=P.face;const sw=Math.sin(P.walk)*.7*(Math.hypot(ix,iy)>.1?1:0);pl.userData.l[0].rotation.x=sw;pl.userData.l[1].rotation.x=-sw;pl.userData.a[0].rotation.x=-sw;pl.userData.a[1].rotation.x=sw;
  if(P.rep>=0){P.rep+=dt;pl.userData.a.forEach((a,i)=>a.rotation.x=-1.2+Math.sin(t*14+i)*.4);if(P.rep>=RT()){P.rep=-1;S.st.rep++;cartBrk=false;DUR=Math.round(DURS[S.durLv]*.6);arp([440,554,659]);toast('修理完了！')}}
@@ -1692,7 +1741,7 @@ function loop(now){requestAnimationFrame(loop);const dt=Math.min(.05,(now-last)/
    const pd=dist2(h.x,h.z,P.pos.x,P.pos.z);if(pd<1.5){P.kx=(P.pos.x-h.x)*10;P.kz=(P.pos.z-h.z)*10;e.st='cool';e.t=4;snd(140,.2,'square',.08);hurt(18+curZ*4)}if(e.t<=0){e.st='cool';e.t=4}}
   else if(e.st=='stun'){e.g.rotation.z=Math.sin(t*30)*.2;if(e.t<=0){e.st='cool';e.t=5;e.g.rotation.z=0}}
   else if(e.st=='cool'){vx=-dx/d*3;vz=-dz/d*3;if(e.t<=0){e.st='idle';e.cd=4}}
-  h.x+=(vx+e.vx)*dt;h.z+=(vz+e.vz)*dt;e.vx*=.88;e.vz*=.88;const lx=h.x-ZC[curZ],br=Math.hypot(lx,h.z)||1,mn=curZ?9:27,mxr=curZ?(curZ==5?70:84):105;if(!curZ){const cb=Math.max(cheb(h.x,h.z),.01);if(cb<BH+3){h.x*=(BH+3)/cb;h.z*=(BH+3)/cb}}else if(br<mn){h.x=ZC[curZ]+lx*mn/br;h.z*=mn/br}if(br>mxr){h.x=ZC[curZ]+lx*mxr/br;h.z*=mxr/br}h.y=H(h.x,h.z);e.g.position.y=Math.sin(t*4+e.dir)*.1});
+  h.x+=(vx+e.vx)*dt;h.z+=(vz+e.vz)*dt;e.vx*=.88;e.vz*=.88;const lx=h.x-ZC[curZ],br=Math.hypot(lx,h.z)||1,mn=curZ?9:27,mxr=curZ?(curZ==14?96:curZ==5?70:84):105;if(!curZ){const cb=Math.max(cheb(h.x,h.z),.01);if(cb<BH+3){h.x*=(BH+3)/cb;h.z*=(BH+3)/cb}}else if(br<mn){h.x=ZC[curZ]+lx*mn/br;h.z*=mn/br}if(br>mxr){h.x=ZC[curZ]+lx*mxr/br;h.z*=mxr/br}h.y=H(h.x,h.z);e.g.position.y=Math.sin(t*4+e.dir)*.1});
  /* effects */
  for(let i=fx.length-1;i>=0;i--){const f=fx[i];f.l-=dt;f.u(f.m,1-f.l/f.life);if(f.l<=0){scene.remove(f.m);fx.splice(i,1)}}
  dispL.forEach(d=>d.sp.i(d.g,t+d.ph));dispV.forEach(d=>d.sp.i(d.g,t+d.ph));xloop(dt,t,p);
@@ -1813,9 +1862,12 @@ tab=function(t){const r=prev(t);
 
 /* ===== B18: notifications / friend-world invites / auto reload ===== */
 (()=>{
-const APPV='B18',AR_MS=300000;
+const APPV='B21',AR_MS=300000;
 try{const u=new URL(location.href);if(u.searchParams.has('r')){u.searchParams.delete('r');history.replaceState(null,'',u.pathname+u.search+u.hash)}}catch(e){}
 const UPD=[
+ {id:21,t:'B21 レアキャラのインフレ',d:'基地に持ち帰ったときの報酬を、レアほど大きく上がるように調整。コイン ★1〜★7: 10/30/90/350/1500/7000/35000、データも 1/2/4/8/16/32/64。'},
+ {id:20,t:'B20 新キャラ60体・イベント3種・6時間ごとに入れ替え',d:'各エリアに新キャラを計60体追加。イベントに「海開き大祭」「ハロウィン夜会」「星降る七夕」を追加（限定キャラ各20体）。イベントは6時間ごと（0時・6時・12時・18時）に切り替わります。'},
+ {id:19,t:'B19 山の裏側ステージ',d:'山奥の裏口（Lv12〜）から山の反対側へ。中央の里と北・東・南・西の五方向エリア、新キャラ40体を追加。ラッキーブロックは5万コイン。'},
  {id:18,t:'B18 通知タブ・フレンド招待・自動リロード',d:'通知タブを追加（アプデ報告／フレンド申請／ワールド招待）。5分以上アプリを開かないと自動で最新版にリロードします。招待された世界から「自分の世界へ戻る」ボタンで戻れます。'},
  {id:17,t:'B17 図鑑の枠がレア度で変化',d:'銀→緑→青く光る→しましま→金色に輝く→ゆっくり色が変わる→虹色。枠だけでレア度がわかります。'},
  {id:16,t:'B16 サーバー接続の診断',d:'フレンド／交換メニューに「診断する」を追加。失敗の理由が表示されます。'},

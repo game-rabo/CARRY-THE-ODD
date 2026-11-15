@@ -432,7 +432,7 @@ function toast(s){const t=$('toast');t.textContent=String(s).replace(NOEMO,'').t
 function banner(s,c){const b=$('banner');b.textContent=String(s).replace(NOEMO,'').trim();b.style.color=c||'#fff';b.classList.add('on');clearTimeout(b.k);b.k=setTimeout(()=>b.classList.remove('on'),2200)}
 /* actions */
 function near(){let b=null,bd=1e9;const R0=4.2+(S.rs.mag|0)*1.4;for(const c of CR){if(c.pend)continue;const p=c.h.position,d=dist2(p.x,p.z,P.pos.x,P.pos.z),air=p.y-H(p.x,p.z)>2.2||c.sp.sky||c.sp.r>=5;if(d<(air?15:R0)&&d<bd){bd=d;b=c}}return b}
-function col(){if(P.rep>=0)return;if(nearF&&!near()){useF(nearF);return}const c=near();if(!c)return;const ld=LD(),w=WG[c.sp.r],cp0=CAPN();if(ld+w>cp0||cargo.length+fly.length>=30){toast(w>cp0?`重すぎる！積載量の強化が必要（必要${w}）`:`積めない！残り${cp0-ld}／必要${w}。基地へ戻ろう`);snd(150,.2,'square',.06);return}
+function col(){if(P.rep>=0)return;if(nearF&&!near()){useF(nearF);return}const c=near();if(!c||cartBrk)return;const ld=LD(),w=WG[c.sp.r],cp0=CAPN();if(ld+w>cp0||cargo.length+fly.length>=30){toast(w>cp0?`重すぎる！積載量の強化が必要（必要${w}）`:`積めない！残り${cp0-ld}／必要${w}。基地へ戻ろう`);snd(150,.2,'square',.06);return}
  if(net.on&&!net.host){c.pend=1;nsend({t:'claim',u:c.u},net.hostId);return}goFly(c)}
 function goFly(c){const wn=S.wc[c.sp.id]=(S.wc[c.sp.id]|0)+1;if(SUP[c.sp.r])setTimeout(()=>toast(`🌍 世界に${SUP[c.sp.r]}体しかいない ${c.sp.n} の${wn}体目！`),700);CR=CR.filter(x=>x!==c);fly.push({c,t:0,from:c.h.position.clone(),slot:cargo.length+fly.length});snd(500,.3,'triangle',.1,900);S.seen[c.sp.id]=1}
 function eff(m,life,u){scene.add(m);fx.push({m,life,l:life,u})}
@@ -1494,7 +1494,7 @@ function loop(now){requestAnimationFrame(loop);const dt=Math.min(.05,(now-last)/
  /* base */
  EVF.forEach(o=>o.visible=!!(EV()||EA()>=0));if(curZ==0&&!vis)[['gate','gate'],['egate','egt']].forEach(([id,tb],j)=>{const f=FB.find(q=>q.id==id);if(!f)return;const d=Math.hypot(f.x-P.pos.x,f.z-P.pos.z);if(d<3&&!gateIn[j]&&!$('modal').classList.contains('on')){gateIn[j]=1;openMenu(tb)}else if(d>7)gateIn[j]=0});if(curZ==0&&cheb(P.pos.x,P.pos.z)<BH-6&&cargo.length&&!fly.length)register();else if(curZ==0&&cheb(P.pos.x,P.pos.z)<BH&&(DUR<DURS[S.durLv]||cartBrk)&&!cargo.length){DUR=DURS[S.durLv];cartBrk=false}
  /* HUD */
- const n=near(),full=LD()>=cn;$('bCol').style.display=n&&P.rep<0?'block':'none';$('bCol').textContent=full?'満載！':`回収！ ${n?n.sp.n:''}`;helpT=null;if(!cartBrk)for(const id in RP){const r=RP[id];if(r.brk&&dist2(r.cx,r.cz,P.pos.x,P.pos.z)<5)helpT=id}$('bRep').style.display=((cartBrk&&dist2(cp.x,cp.z,P.pos.x,P.pos.z)<6.5)||helpT)&&P.rep<0?'block':'none';
+ const n=near(),full=LD()>=cn;$('bCol').style.display=n&&P.rep<0&&!cartBrk?'block':'none';$('bCol').textContent=full?'満載！':`回収！ ${n?n.sp.n:''}`;helpT=null;if(!cartBrk)for(const id in RP){const r=RP[id];if(r.brk&&dist2(r.cx,r.cz,P.pos.x,P.pos.z)<5)helpT=id}$('bRep').style.display=((cartBrk&&dist2(cp.x,cp.z,P.pos.x,P.pos.z)<6.5)||helpT)&&P.rep<0?'block':'none';
  if(P.rep>=0){$('bRep').style.display='block';$('bRep').textContent='修理中 '+Math.round(P.rep/RT()*100)+'%'}else $('bRep').textContent=helpT?'手伝う':'修理';
  $('area').textContent=vis?'友達の基地':curZ==0&&cheb(P.pos.x,P.pos.z)<BH?'基地':AN[areaOf(P.pos.x,P.pos.z)];$('clock').textContent=PN[p]+(EV()&&p>=2?' 流星祭':'')+(RED()?' 赤月':'');$('rebb').textContent=(S.reb|0)?'♻再生'+(S.reb|0)+'回 Epic出現×'+rebM(3).toFixed(1):'';hudRes();
  $('cg').textContent=LD()+' / '+cn;$('ldb').style.width=Math.min(100,LD()/cn*100)+'%';const dm=DURS[S.durLv];$('dur').style.width=DUR/dm*100+'%';$('dur').style.background=DUR>60?'#4cd964':DUR>30?'#ffcc00':'#ff3b30';

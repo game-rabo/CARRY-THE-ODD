@@ -722,7 +722,7 @@ function xloop(dt,t,p){
 
 /* ===== v2: zones / HUD dock / minimap / friends+trade (Supabase) / facilities ===== */
 const ZC=[0,0,0,1000,1500,2000,2500,3000,3500,4000,4500,5000,5500,6000],ZLV=[1,1,1,3,5,7,9,11,13,22,28,34,40,48],ZSK=[0,0,0,0xffb3d9,0xcfe8ff,0x9fd8ff,0x14607a,0x070718,0x3a1050,0xdff2ff,0x4a1208,0x0e3a5a,0x02020c,0xff8ad8],ZGC=[0,0,0,'#e8a0c0','#eef6ff','#b8e6ff','#c9b27a','#25254a','#4a2060','#f4f0ff','#3a1a1a','#7fd0e0','#1a1030','#ff9ae0'],ZDC=[0,0,0,['#ff6b9a','#ffd34d'],['#2f7a5a','#fff'],['#fff','#d6f0ff'],['#ff7a6a','#4cd0c0'],['#6a6a9a','#b58bff'],['#9a3acb','#40ffd0'],['#fff','#ffd34d'],['#5a2a1a','#ff6a2a'],['#7fe0ff','#e8fcff'],['#4a3a7a','#40ffd0'],['#7a3cff','#ffe14d']];
-let curZ=0,nearF=null,SBE=0;
+let curZ=0,nearF=null,SBE=0,SBL=null;
 /* ===== +30 species (festival / spirit / cosmic / silly / machine) ===== */
 const sph=(g,r,c,cx,cy,cz,s=.5,o)=>{if(window.__voxSph)return window.__voxSph(g,r,c,cx,cy,cz,s,o);for(let x=-r;x<=r;x++)for(let y=-r;y<=r;y++)for(let z=-r;z<=r;z++)if(x*x+y*y+z*z<=r*r+.5)bx(g,s,s,s,typeof c=='function'?c(x,y,z):c,cx+x*s,cy+y*s,cz+z*s,o)};
 const eyes=(g,y,z,s,c='#222',h=.22,o)=>[-s,s].forEach(x=>bx(g,.14,h,.06,c,x,y,z,o));
@@ -938,7 +938,7 @@ const FT={trend:'trend',home:'shop',hall:'hall',lab:'shop',cwork:'shop',twork:'s
 function useF(f){openMenu(FT[f.id]||'shop')}
 /* supabase */
 const SBU='https://tgftgxbvoksvljfsqwye.supabase.co/rest/v1/',SBK='sb_publishable_mGzKef4AynwpdYJQ7Zyl9Q_XOJsJcw2';
-const sb=async(p,m='GET',b,pf)=>{try{const r=await fetch(SBU+p,{method:m,headers:{apikey:SBK,'Content-Type':'application/json',Prefer:pf||'return=representation'},body:b?JSON.stringify(b):undefined});if(!r.ok)throw 0;SBE=0;const t=await r.text();return t?JSON.parse(t):[]}catch(e){SBE=1;return null}};
+const sb=async(p,m='GET',b,pf)=>{try{const r=await fetch(SBU+p,{method:m,headers:{apikey:SBK,'Content-Type':'application/json',Prefer:pf||'return=representation'},body:b?JSON.stringify(b):undefined});if(!r.ok){let tx='',j={};try{tx=await r.text();j=JSON.parse(tx)}catch(_){}SBL={st:r.status,code:j.code||'',msg:j.message||String(tx).slice(0,140),path:p.split('?')[0],m};throw 0}SBE=0;SBL=null;const t=await r.text();return t?JSON.parse(t):[]}catch(e){if(e!==0)SBL={st:0,code:'',msg:String(e&&e.message||e).slice(0,100),path:p.split('?')[0],m};SBE=1;return null}};
 const FR={fs:[],pend:[],out:[],prof:{},tr:[]},nmP=id=>FR.prof[id]?FR.prof[id].name:'???';let TP=null,pn=0;
 const pushProf=()=>sb('profiles?on_conflict=id','POST',{id:S.uid,code:S.code,name:S.name,lv:S.lv,updated_at:new Date().toISOString()},'resolution=merge-duplicates,return=minimal');
 function reconcile(t){const u=S.uid;let ch=0;t.forEach(r=>{const e=S.esc[r.id];if(!e)return;if(r.status=='done'){addC(r.from_id==u?r.want:r.give);S.st.trade++;delete S.esc[r.id];ch=1;toast('交換成立！');arp([523,659,784])}else if(r.status=='cancelled'){addC(e);delete S.esc[r.id];ch=1;toast('交換が中止（返却しました）')}});if(ch){save();rebuildDisp()}}
@@ -947,7 +947,7 @@ async function poll(){const u=S.uid;if(!(pn++%10))await pushProf();const f=await
  const ids=[...new Set([...FR.fs,...FR.pend,...FR.out])];if(ids.length){const p=await sb(`profiles?id=in.(${ids.join(',')})&select=id,name,lv,code`);p&&p.forEach(x=>FR.prof[x.id]=x)}
  const t=await sb(`trades?or=(from_id.eq.${u},to_id.eq.${u})&order=id.desc&limit=30&select=*`);if(t){FR.tr=t;reconcile(t)}
  if($('modal').classList.contains('on')&&(curTab=='fr'||curTab=='trade2')&&!(document.activeElement&&document.activeElement.tagName=='INPUT'))tab(curTab)}
-setInterval(poll,6000);setTimeout(poll,1500);
+let PSK=0,PSC=0;const pollG=async()=>{if(PSK>0){PSK--;return}await poll();if(SBE){PSC=Math.min(PSC+1,6);PSK=PSC*2}else PSC=0};setInterval(pollG,6000);setTimeout(pollG,1500);
 /* tabs */
 const H2=(a,b)=>`<div class="up"><div>${a}</div>${b||''}</div>`,B2=(l,a,v,w,c='g')=>`<button class="b ${c}" data-a="${a}"${v!=null?` data-v="${v}"`:''}${w!=null?` data-w="${w}"`:''}>${l}</button>`,SM=q=>`<span class="sm">${q}</span>`;
 const TT={dex:'📖 図鑑',shop:'🔨 工房・基地強化',ach:'🏆 実績・イベント',hall:'🖼 展示ホール',fr:'🤝 フレンド',trade2:'🔄 交換所',gate:'🗺 探索ゲート',quest:'📋 クエスト掲示板',clock:'🕰 時計台',set:'⚙ 設定'};
@@ -958,12 +958,12 @@ tab=function(t){if(t=='net')t='fr';if(t=='trade')t='trade2';curTab=t;$('mt').tex
  else if(t=='quest'){h=H2('毎回の探索に目標を！'+'<br>'+SM('達成すると🪙と経験値'),'')+S.q.map((q,i)=>{const p=Math.min(q.g,(S.st[q.k]|0)-q.b);return H2(`${q.n} ${p}/${q.g}<br>${SM('🪙'+q.r)}`,p>=q.g?B2('受取','qc',i):'')}).join('')}
  else if(t=='clock'){h=H2(`現在 ${PN[ph()]}<br>${SM('1回 🪙50')}`,'')+PN.map((n,i)=>H2(n,B2('進める','ck',i,null,'c'))).join('')}
  else if(t=='fr'){h=H2(`あなた: ${S.name}<br>${SM('フレンドコード')} <b style="color:#ffd34d;font-size:20px">${S.code}</b>`,'')+H2(`名前 <input id="nm" class="in" value="${S.name}" maxlength="8">`,B2('保存','fname',null,null,'c'))+H2('<input id="fc" class="in" placeholder="相手のコード">',B2('申請','fadd',null,null,'c'));
-  if(SBE)h+='<div style="color:#ff9b9b">サーバーに接続できません（SQL設定を確認）</div>';
+  if(SBE)h+=''+diagH()+'';
   FR.pend.forEach(id=>h+=H2(`📨 ${nmP(id)} から申請`,B2('承認','fok',id)+' '+B2('却下','fno',id,null,'r')));FR.out.forEach(id=>h+=H2(`⏳ ${nmP(id)} へ申請中`,''));
   FR.fs.forEach(id=>h+=H2(`👤 ${nmP(id)} ${SM('Lv'+(FR.prof[id]?FR.prof[id].lv:'?'))}`,B2('交換','offer',id,null,'c')+' '+B2('解除','fdel',id,null,'r')))}
  else if(t=='trade2'){const u=S.uid;if(TP){h=`<div style="font-size:18px;margin-bottom:8px">${TP.m=='offer'?nmP(TP.f)+'さんに出すキャラを選択':'相手に出すキャラを選択'}</div>`+(itemKeys().map(k=>H2(nmK(k),B2('選ぶ','tpk',k))).join('')||'<div>出せるキャラがいません</div>')+B2('やめる','tpx',null,null,'r')}
   else{h=H2('フレンドと安全に交換<br>'+SM('出したキャラは預かり、成立か中止で確定します'),'')+FR.fs.map(id=>H2('👤 '+nmP(id),B2('提示する','offer',id,null,'c'))).join('');
-   FR.tr.filter(r=>r.status=='open'||r.status=='countered').forEach(r=>{const mine=r.from_id==u;if(mine)h+=H2(`📤 ${nmP(r.to_id)}へ ${nmK(r.give)}<br>${SM(r.status=='countered'?'相手の提示: '+nmK(r.want):'返事待ち')}`,(r.status=='countered'?B2('成立','tf',r.id):'')+' '+B2('取消','tx',r.id,null,'r'));else if(r.status=='open')h+=H2(`📥 ${nmP(r.from_id)} が ${nmK(r.give)} を提示`,B2('応じる','tw',r.id)+' '+B2('断る','tx',r.id,null,'r'))});if(SBE)h+='<div style="color:#ff9b9b">サーバーに接続できません</div>'}}
+   FR.tr.filter(r=>r.status=='open'||r.status=='countered').forEach(r=>{const mine=r.from_id==u;if(mine)h+=H2(`📤 ${nmP(r.to_id)}へ ${nmK(r.give)}<br>${SM(r.status=='countered'?'相手の提示: '+nmK(r.want):'返事待ち')}`,(r.status=='countered'?B2('成立','tf',r.id):'')+' '+B2('取消','tx',r.id,null,'r'));else if(r.status=='open')h+=H2(`📥 ${nmP(r.from_id)} が ${nmK(r.give)} を提示`,B2('応じる','tw',r.id)+' '+B2('断る','tx',r.id,null,'r'))});if(SBE)h+=''+diagH()+''}}
  else return _tab(t);
  m.innerHTML=h;m.querySelectorAll('[data-a]').forEach(b=>b.onclick=()=>act(b.dataset.a,b.dataset.v,b.dataset.w))};
 function openMenu(t){$('modal').classList.add('on');tab(t);snd(500,.1,'sine',.06);if(t=='fr'||t=='trade2')poll()}
@@ -1671,7 +1671,7 @@ tab=function(t){
  if(t=='rank'){h=row('ランキング読み込み中…<br>'+sm('レベルの高い順にトップ10'),'');
   m.innerHTML=h;
   sb('profiles?select=name,lv&order=lv.desc&limit=10').then(L=>{if(curTab!='rank'||!$('modal').classList.contains('on'))return;
-   m.innerHTML=L?(L.map((p,i)=>row(`${['🥇','🥈','🥉'][i]||(i+1)+'位'} ${String(p.name||'???').replace(/[<>&]/g,'')}`,`<b>Lv${p.lv}</b>`)).join('')||row('まだ記録がありません','')):row('通信できませんでした<br>'+sm('あとでもう一度ためしてね'),'')});
+   m.innerHTML=L?(L.map((p,i)=>row(`${['🥇','🥈','🥉'][i]||(i+1)+'位'} ${String(p.name||'???').replace(/[<>&]/g,'')}`,`<b>Lv${p.lv}</b>`)).join('')||row('まだ記録がありません','')):row('通信できませんでした<br>'+sm('あとでもう一度ためしてね')+diagT(),'')});
   return}
  if(t=='garage'){h=row(`運搬装置の耐久 ${Math.ceil(DUR)}/${DURS[S.durLv]}<br>${sm('修理は🪙150')}`,B2('修理','g_rep',null,null,'g'))+row(`車体をピカピカに！<br>${sm('🪙400：耐久を満タンにして修理ゲージも解除')}`,B2('フルメンテ','g_full',null,null,'c'))}
  else if(t=='lotto'){h=row(`ラッキーくじ 1回🪙300<br>${sm('0〜15000コインが当たる！ ジャックポットは0.5%')}`,B2('1回','l1',null,null,'g'))+row(`10連くじ 🪙3000<br>${sm('まとめてドキドキ')}`,B2('10連','l10',null,null,'r'))+row(`所持🪙 ${S.coins}`,'')}
@@ -1704,6 +1704,24 @@ if(g){const M=(c,e)=>new THREE.MeshLambertMaterial({color:c,flatShading:true,emi
  bx(ca,.6,2,.6,'#ffe14d',0,10.2,0,{e:'#fb0'});CR2.push(cr);obs.push({x:cx-28,z:18,r:6});
  for(let i=0;i<10;i++){const a=i/10*Math.PI*2,x=cx+Math.cos(a)*46,z=Math.sin(a)*46,q=new THREE.Group();bx(q,.8,9,.8,'#fff',0,4.5,0);bx(q,2.6,.8,.8,['#ff3b4a','#ffe14d','#3ddf5a','#3fc3ff','#b04cff'][i%5],0,9.4,0,{e:['#f22','#fb0','#0a4','#39f','#82c'][i%5]});q.position.set(x,H(x,z),z);g.add(q)}}
 (function an2(now){requestAnimationFrame(an2);const t=now/1000;if(WH.wheel){WH.wheel.rotation.z=t*.25;WH.forEach(d=>d.rotation.z=-t*.25)}CR2.forEach(c=>{c.rotation.y=t*.6})})(0);
+})();
+
+/* ===== B16: Supabase diagnosis ===== */
+(()=>{
+const E=x=>String(x==null?'':x).replace(/[<>&"']/g,'');
+let DG=null;
+const why=e=>{if(!e)return '';if(e.st==0)return 'ネットワークで失敗: Supabaseプロジェクトが一時停止(Paused)していないか／広告ブロッカーや社内ネットワークで遮断されていないか確認してください';
+ if(e.st==404||e.code=='PGRST205'||e.code=='42P01')return 'テーブルがありません: SupabaseのSQL Editorで supabase_setup.sql を実行してください';
+ if(e.st==401||e.st==403||e.code=='42501')return '権限エラー(RLS/キー): supabase_setup.sql のポリシーを実行／キー(sb_publishable_…)が正しいか確認してください';
+ if(e.st==409)return '重複データ(申請済みなど)';if(e.st>=500)return 'サーバー側エラー: 少し待って再試行してください';return '';};
+window.diagT=()=>SBL?`<br><span style="font-size:11px;-webkit-text-stroke:0;color:#ffb3b3;font-weight:700">[${E(SBL.m)} ${E(SBL.path)}] ${SBL.st||'通信失敗'} ${E(SBL.code)} ${E(SBL.msg)}<br>${E(why(SBL))}</span>`:'';
+window.diagH=()=>{let h=`<div style="color:#ff9b9b;font-size:13px;-webkit-text-stroke:0;font-weight:700;line-height:1.5">サーバーに接続できません${diagT()}</div>`;
+ if(DG)h+=`<div style="font-size:12px;-webkit-text-stroke:0;font-weight:700;line-height:1.6;color:#fff">${DG.map(l=>E(l)).join('<br>')}</div>`;
+ return h+'<div class="up"><div>接続診断<br><span class="sm">各テーブルを順に確認します</span></div><button class="b c" data-a="diag">診断する</button></div>'};
+NA.diag=async()=>{DG=['診断中…'];if($('modal').classList.contains('on'))tab(curTab);const out=[];
+ for(const t of ['profiles','friends','trades']){try{const r=await fetch(SBU+t+'?select=*&limit=1',{headers:{apikey:SBK}});if(r.ok)out.push('✅ '+t+' 読み取りOK');else{let j={};try{j=await r.json()}catch(_){}out.push('❌ '+t+' '+r.status+' '+(j.code||'')+' '+(j.message||'')+' → '+(why({st:r.status,code:j.code})||''))}}catch(e){out.push('❌ '+t+' 通信失敗 → '+why({st:0}))}}
+ try{const r=await sb('profiles?on_conflict=id','POST',{id:S.uid,code:S.code,name:S.name,lv:S.lv,updated_at:new Date().toISOString()},'resolution=merge-duplicates,return=minimal');out.push(r?'✅ profiles 書き込みOK':'❌ profiles 書き込み失敗 '+(SBL?SBL.st+' '+SBL.code+' '+SBL.msg:''))}catch(e){out.push('❌ profiles 書き込み失敗')}
+ DG=out;if($('modal').classList.contains('on'))tab(curTab)};
 })();
 requestAnimationFrame(loop);
 </script></body></html>

@@ -35,7 +35,7 @@ canvas{position:fixed;inset:0;width:100%;height:100%;display:block}
 #banner.on{opacity:1;transform:scale(1)}
 #menu,#title,#rew{position:fixed;inset:0;display:none;z-index:5}
 #menu{background:rgba(24,20,52,.95);padding:calc(14px + env(safe-area-inset-top)) 14px 14px;overflow:auto;touch-action:pan-y}
-#tabs{display:flex;gap:8px;margin-bottom:12px}#tabs .b{flex:1;font-size:13px;padding:8px 2px}.in{font:inherit;-webkit-text-stroke:0;color:#111;width:110px;padding:6px;border-radius:10px;border:3px solid #151515}#emo{display:none;flex-direction:column;gap:6px;right:calc(24px + env(safe-area-inset-right));bottom:calc(250px + env(safe-area-inset-bottom))}#emo.show{display:flex}#bEm{right:calc(30px + env(safe-area-inset-right));bottom:calc(184px + env(safe-area-inset-bottom));width:52px;height:52px;border-radius:50%;padding:0;font-size:24px}
+#tabs{display:flex;gap:8px;margin-bottom:12px}#tabs .b{flex:1;font-size:13px;padding:8px 2px}.in{user-select:text;-webkit-user-select:text;font:inherit;-webkit-text-stroke:0;color:#111;width:110px;padding:6px;border-radius:10px;border:3px solid #151515}#emo{display:none;flex-direction:column;gap:6px;right:calc(24px + env(safe-area-inset-right));bottom:calc(250px + env(safe-area-inset-bottom))}#emo.show{display:flex}#bEm{right:calc(30px + env(safe-area-inset-right));bottom:calc(184px + env(safe-area-inset-bottom));width:52px;height:52px;border-radius:50%;padding:0;font-size:24px}
 #grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .cd{border:4px solid;border-radius:16px;background:#2c2760;padding:8px;font-size:14px;min-height:110px}
 .cd b{font-size:17px;display:block}.cd small{display:block;-webkit-text-stroke:0;font-weight:700;color:#cdd;line-height:1.35}
@@ -312,6 +312,7 @@ canvas.mg{position:static;inset:auto;width:100%;max-width:300px;height:auto;marg
 <div id="rew" class="st"><div id="rl"></div><button class="b g" id="rOk">OK</button></div>
 <div id="title" class="st"><h1><span style="color:#ffe14d">CARRY</span><br><span style="color:#ff5fa8">THE ODD</span></h1><p>不思議な生き物を見つけて、運搬装置に乗せ、敵から守って基地へ連れ帰ろう。施設に近づくと「操作」ボタンが出ます。レベルが上がると新エリアが解放！<br><br>移動：左スティック / WASD<br>視点：自動で追従（右画面ドラッグで素早く調整）<br>回収：E ／ 道具：クリック・F ／ ジャンプ：Space</p><button class="b g" id="start" style="font-size:28px;padding:12px 40px">はじめる</button></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/peerjs/1.4.7/peerjs.min.js" onerror="var s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js';document.head.appendChild(s)"></script>
 <script>
 /* ===== iOS拡大防止ガード(最優先で登録) ===== */
 (()=>{'use strict';
@@ -706,7 +707,7 @@ function tab(t){const m=$('mc');curTab=t;let h='';const ro=(a,b)=>`<div class="u
  +ro(`研究所 ${Math.floor(S.pend)}/${50+S.bl*50}<br>${sm('展示キャラが研究データを生みます')}`,bt('回収','pend'))
  +`<div style="margin:10px 0 4px">運搬装置の色</div><div style="display:flex;gap:6px;flex-wrap:wrap">${CARTC.map((x,i)=>cb('cc',x,i,'cart')).join('')}</div><div style="margin:10px 0 4px">服の色</div><div style="display:flex;gap:6px;flex-wrap:wrap">${SHC.map((x,i)=>cb('cs',x,i,'shirt')).join('')}</div>`}
  else if(t=='ach'){h=ro(`🌠 流星祭 ${EV()?'開催中':'休止中'}<br>${sm('⭐'+S.star+' ／ 共同目標 '+Math.min(S.evg,30)+'/30 '+(S.evr?'達成':''))}`,'')+ACH.map(a=>ro(`${S.ach[a.id]?'🏆':'🔒'} ${a.n}<br>${sm(a.d+' 🪙'+a.r)}`,S.ach[a.id]?bt(S.ti==a.id?'称号中':'称号','ti',a.id,null,S.ti==a.id?'c':'g'):'')).join('')}
- else if(t=='net'){const ids=Object.keys(RP);h=!net.on?ro(`名前 <input id="nm" class="in" value="${S.name}" maxlength="8">`,'')+ro('部屋を作る（最大8人）',bt('作成','host'))+ro('<input id="rc" class="in" placeholder="部屋コード">',bt('参加','join',null,null,'c'))+`<div style="font-size:12px;-webkit-text-stroke:0;color:#cdd;font-weight:700;line-height:1.5">PeerJS(P2P)で接続します。ホストが出現キャラを管理し、交換は2段階確認で成立します。</div>`:ro(`${net.host?'ホスト':'参加中'} 部屋コード <b>${(net.host?net.me:net.hostId).slice(4)}</b><br>${sm('接続 '+(ids.length+1)+'/8')}`,bt('退出','leave',null,null,'r'))+ids.map(id=>ro(`👤 ${RP[id].nm||'?'}`,bt('交換','trade',id)+' '+bt('基地','visit',id,null,'c'))).join('')}
+ else if(t=='net'){const ids=Object.keys(RP);h=net.busy&&!net.on?ro('⏳ 接続中…<br>'+sm('少し待ってください'),bt('中止','leave',null,null,'r')):!net.on?ro(`名前 <input id="nm" class="in" value="${S.name}" maxlength="8">`,'')+ro('部屋を作る（最大8人）',bt('作成','host'))+ro('<input id="rc" class="in" placeholder="部屋コード" maxlength="12" autocapitalize="off" autocomplete="off" spellcheck="false">',bt('参加','join',null,null,'c'))+`<div style="font-size:12px;-webkit-text-stroke:0;color:#cdd;font-weight:700;line-height:1.5">PeerJS(P2P)で接続します。ホストが出現キャラを管理し、交換は2段階確認で成立します。</div>`:ro(`${net.host?'ホスト':'参加中'} 部屋コード <b>${(net.host?net.me:net.hostId).slice(4)}</b><br>${sm('接続 '+(ids.length+1)+'/8')}`,bt('コピー','copy',null,null,'c')+' '+bt('退出','leave',null,null,'r'))+ids.map(id=>ro(`👤 ${RP[id].nm||'?'}`,bt('交換','trade',id)+' '+bt('基地','visit',id,null,'c'))).join('')}
  else if(t=='trade'){if(!TR)h='<div>取引なし</div>';else if(TR.st=='pick'||TR.st=='ask'){const ask=TR.st=='ask';h=`<div style="font-size:18px;margin-bottom:8px">${ask?nmK(TR.ra)+' と交換する自分のキャラを選択':'相手に出すキャラを選択'}</div>`+itemKeys().map(k=>ro(nmK(k),bt('選ぶ',ask?'tp':'to',k))).join('')+bt('やめる','tno',null,null,'r')}else if(TR.st=='confirm')h=`<div style="font-size:20px;margin-bottom:10px">${nmK(TR.a)} ⇄ ${nmK(TR.b)}<br>交換しますか？</div>`+bt('交換する','tok')+' '+bt('やめる','tno',null,null,'r');else h='<div style="margin-bottom:10px">相手の返答を待っています…</div>'+bt('中止','tno',null,null,'r')}
  else h=ro('サウンド',bt(S.mute?'OFF':'ON','snd',null,null,'c'))+ro(`イベント開催<br>${sm('OFFにすると祭りは開かれません')}`,bt(S.evoff?'OFF':'ON','evoff',null,null,S.evoff?'r':'c'))+ro(`名前 <input id="nm" class="in" value="${S.name}" maxlength="8">`,bt('変更','fname',null,null,'c'))+ro('セーブ消去',bt('消去','rs',null,null,'r'));
  m.innerHTML=h;m.querySelectorAll('[data-a]').forEach(b=>b.onclick=()=>act(b.dataset.a,b.dataset.v,b.dataset.w))}
@@ -721,6 +722,7 @@ function act(a,v,w){const inb=cheb(P.pos.x,P.pos.z)<BH+2&&curZ==0&&!vis;
  else if(a=='cc'||a=='cs'){const L=a=='cc'?CARTC:SHC,k=a=='cc'?'cart':'shirt',i=+v,it=L[i];if(S.cos.own[k+i]||!(it.p||it.s)||pay(it.p||0,it.s||0)){S.cos.own[k+i]=1;S.cos[k]=i;setLook()}}
  else if(a=='ti'){S.ti=v;setTag()}
  else if(a=='host')hostRoom();else if(a=='join')joinRoom();else if(a=='leave')leaveNet();
+ else if(a=='copy'){const c=(net.host?net.me:net.hostId).slice(4);(navigator.clipboard&&navigator.clipboard.writeText?navigator.clipboard.writeText(c):Promise.reject()).then(()=>toast('コピーしました: '+c)).catch(()=>toast('部屋コード: '+c))}
  else if(a=='trade'){TR={w:v,st:'pick'};curTab='trade'}
  else if(a=='visit'){nsend({t:'vi'},v);toast('訪問リクエスト送信')}
  else if(a=='to'){nsend({t:'tr',k:'offer',a:v},TR.w);TR.a=v;TR.st='wait'}
@@ -731,14 +733,31 @@ function act(a,v,w){const inb=cheb(P.pos.x,P.pos.z)<BH+2&&curZ==0&&!vis;
  else if(a=='rs'){if(confirm('データを消去しますか？')){localStorage.removeItem('cto');location.reload()}return}
  save();tab(curTab)}
 /* ---------- network ---------- */
-const net={on:0,host:0,peer:null,conns:{},me:'',hostId:'',hc:null},RP={},BC=new Set(['p','em','ping']);
+const net={on:0,busy:0,host:0,peer:null,conns:{},me:'',hostId:'',hc:null},RP={},BC=new Set(['p','em','ping']);
 function nsend(m,to){m.from=net.me;if(net.host){if(to){const c=net.conns[to];c&&c.open&&c.send(m)}else for(const id in net.conns){const c=net.conns[id];c.open&&c.send(m)}}else if(net.hc&&net.hc.open){if(to)m.to=to;net.hc.send(m)}}
 function hostRecv(c,m){m.from=c.peer;if(m.to&&m.to!==net.me){const d=net.conns[m.to];d&&d.open&&d.send(m);return}handle(m);if(!m.to&&BC.has(m.t))for(const id in net.conns)if(id!==c.peer){const d=net.conns[id];d.open&&d.send(m)}}
 function nameIn(){const e=$('nm');if(e&&e.value)S.name=e.value.slice(0,8);setTag();save()}
-function hostRoom(){nameIn();const pr=net.peer=new Peer('cto-'+Math.random().toString(36).slice(2,6));pr.on('open',id=>{net.me=id;net.host=1;net.on=1;toast('部屋コード: '+id.slice(4));tab('net')});pr.on('error',()=>{toast('接続エラー');leaveNet()});
- pr.on('connection',c=>{if(Object.keys(net.conns).length>=7){c.on('open',()=>{c.send({t:'full'});setTimeout(()=>c.close(),300)});return}c.on('open',()=>{net.conns[c.peer]=c;toast('プレイヤーが参加');if(curTab=='net')tab('net')});c.on('data',m=>hostRecv(c,m));c.on('close',()=>{delete net.conns[c.peer];rmRP(c.peer)})})}
-function joinRoom(){nameIn();const code=($('rc').value||'').trim();if(!code)return;const pr=net.peer=new Peer();pr.on('open',id=>{net.me=id;net.hostId='cto-'+code;const c=pr.connect(net.hostId);c.on('open',()=>{net.hc=c;net.on=1;toast('接続しました');tab('net')});c.on('data',handle);c.on('close',()=>{toast('切断されました');leaveNet()})});pr.on('error',()=>{toast('接続できません');leaveNet()})}
-function leaveNet(){try{net.peer&&net.peer.destroy()}catch(e){}net.on=0;net.host=0;net.conns={};net.hc=null;for(const id in RP)rmRP(id);if(curTab=='net')tab('net')}
+const PCFG={config:{iceServers:[{urls:'stun:stun.l.google.com:19302'},{urls:'stun:global.stun.twilio.com:3478'}]}},RCH='abcdefghjkmnpqrstuvwxyz23456789';
+const rcode=()=>{let q='';for(let i=0;i<5;i++)q+=RCH[Math.random()*RCH.length|0];return q};
+function peerOk(){if(typeof Peer==='undefined'){toast('通信ライブラリを読み込めません。ネット接続を確認して再読込してください');return 0}return 1}
+function netErr(e){const t=e&&e.type;return t=='peer-unavailable'?'部屋が見つかりません（コードを確認）':(t=='network'||t=='server-error'||t=='socket-error'||t=='socket-closed')?'通信サーバーに接続できません':t=='browser-incompatible'?'このブラウザは非対応です':'接続エラー'}
+function hostRoom(tries){tries=tries|0;if(net.on||(net.busy&&!tries))return;if(!peerOk())return;nameIn();net.busy=1;if(curTab=='net')tab('net');
+ let done=0;const pr=net.peer=new Peer('cto-'+rcode(),PCFG);
+ const fail=m=>{clearTimeout(to);done=1;net.busy=0;m&&toast(m);try{pr.destroy()}catch(e){}if(net.peer===pr)net.peer=null;net.on=0;net.host=0;net.conns={};if(curTab=='net')tab('net')};
+ const to=setTimeout(()=>{if(!done)fail('部屋を作れませんでした（タイムアウト）')},15000);
+ pr.on('open',id=>{done=1;clearTimeout(to);net.busy=0;net.me=id;net.host=1;net.on=1;toast('部屋コード: '+id.slice(4));if(curTab=='net')tab('net')});
+ pr.on('error',e=>{if(e&&e.type=='unavailable-id'&&tries<4&&!done){clearTimeout(to);done=1;try{pr.destroy()}catch(_){}net.peer=null;return hostRoom(tries+1)}if(done&&net.on){toast(netErr(e));return}fail(netErr(e))});
+ pr.on('disconnected',()=>{if(net.host&&net.on&&!pr.destroyed)try{pr.reconnect()}catch(e){}});
+ pr.on('connection',c=>{if(Object.keys(net.conns).length>=7){c.on('open',()=>{c.send({t:'full'});setTimeout(()=>c.close(),300)});return}c.on('open',()=>{net.conns[c.peer]=c;toast('プレイヤーが参加');if(curTab=='net')tab('net')});c.on('data',m=>hostRecv(c,m));c.on('close',()=>{delete net.conns[c.peer];rmRP(c.peer);if(curTab=='net')tab('net')});c.on('error',()=>{})})}
+function joinRoom(){if(net.on||net.busy)return;if(!peerOk())return;nameIn();const code=(($('rc')||{}).value||'').trim().toLowerCase().replace(/^cto-/,'');if(!code)return toast('部屋コードを入力してください');
+ net.busy=1;if(curTab=='net')tab('net');let done=0;const pr=net.peer=new Peer(undefined,PCFG);
+ const fail=m=>{clearTimeout(to);done=1;net.busy=0;m&&toast(m);try{pr.destroy()}catch(e){}if(net.peer===pr)net.peer=null;net.on=0;net.hc=null;if(curTab=='net')tab('net')};
+ const to=setTimeout(()=>{if(!done)fail('接続できません（タイムアウト）')},15000);
+ pr.on('open',id=>{net.me=id;net.hostId='cto-'+code;const c=pr.connect(net.hostId,{reliable:true});
+  c.on('open',()=>{done=1;clearTimeout(to);net.busy=0;net.hc=c;net.on=1;toast('接続しました');if(curTab=='net')tab('net')});
+  c.on('data',handle);c.on('close',()=>{if(net.on){toast('切断されました');leaveNet()}});c.on('error',()=>{})});
+ pr.on('error',e=>{if(!done)fail(netErr(e));else toast(netErr(e))})}
+function leaveNet(){net.busy=0;try{net.peer&&net.peer.destroy()}catch(e){}net.peer=null;net.on=0;net.host=0;net.conns={};net.hc=null;for(const id in RP)rmRP(id);if(curTab=='net')tab('net')}
 function rmRP(id){const r=RP[id];if(r){scene.remove(r.g,r.c);delete RP[id]}}
 function mkRP(){const g=new THREE.Group(),c=new THREE.Group(),b=bx(g,.9,1.1,.5,'#fff',0,1.5,0);b.material=lam('#fff');g.userData.b=b;bx(g,.8,.8,.8,'#ffd9b3',0,2.5,0);bx(g,.9,.3,.9,'#3b2a1a',0,2.95,0);[-.25,.25].forEach(q=>bx(g,.35,.9,.4,'#2a4a9a',q,.55,0));[-.65,.65].forEach(q=>bx(g,.3,.9,.3,'#ffd9b3',q,1.6,0));bx(c,2.2,.4,2.2,'#8a5a2b',0,.5,0);bx(c,2.2,.4,.2,'#6b4423',0,.9,1);bx(c,2.2,.4,.2,'#6b4423',0,.9,-1);scene.add(g,c);return{g,c,tg:new V3(),cx:0,cz:0,f:0,tag:null,nm:'',ts:0}}
 function handle(m){const f=m.from;switch(m.t){
@@ -1612,7 +1631,11 @@ const EVS=new THREE.Group();SKY.add(EVS);const AUR=[];
 for(let i=0;i<6;i++){const gm=new THREE.PlaneGeometry(170,50,34,1),n=gm.attributes.position.count,col=new Float32Array(n*3);gm.setAttribute('color',new THREE.BufferAttribute(col,3));const m=new THREE.Mesh(gm,new THREE.MeshBasicMaterial({vertexColors:true,transparent:true,blending:THREE.AdditiveBlending,depthWrite:false,side:2,fog:false}));const a=i/6*6.283;m.position.set(Math.cos(a)*150,32,Math.sin(a)*150);m.rotation.y=-a-Math.PI/2;EVS.add(m);AUR.push({m,gm,a})}
 const HAL=[];[[96,.9],[70,1.3],[120,.6]].forEach(([r,s],i)=>{const m=new THREE.Mesh(new THREE.RingGeometry(r,r+3.2,64),new THREE.MeshBasicMaterial({color:0xffffff,transparent:true,opacity:.55,blending:THREE.AdditiveBlending,side:2,depthWrite:false,fog:false}));m.position.y=24+i*10;m.rotation.x=1.25;EVS.add(m);HAL.push({m,s})});
 const EC=new THREE.Color(),EC2=new THREE.Color(),EPAL=()=>{const e=EA();return e>=0?EVT[e].pal:['#ff6bd6','#7ff6ff','#ffe45c']};
-const _sk2=skyT;skyT=function(dt,t,p){_sk2(dt,t,p);const on=!curZ&&!vis&&(EA()>=0||EV()),day=p<2&&!curZ;BSUN.visible=day&&!curZ;BMOON.visible=p>=2&&!curZ;BSUN.material.color.set(p==1?0xffb08a:0xffffff);BSUN.position.y=34+Math.sin(t*.3)*1.2;BMOON.position.y=36+Math.sin(t*.35)*1.2;
+const _sk2=skyT;skyT=function(dt,t,p){_sk2(dt,t,p);const on=!curZ&&!vis&&(EA()>=0||EV()),day=p<2&&!curZ;BSUN.visible=day&&!curZ;BMOON.visible=p>=2&&!curZ;{/* sun & moon travel an arc: rise in the east, pass nearly overhead, set in the west */
+ const tt=T%1200,isD=tt<600,u=(isD?tt:tt-600)/600,al=Math.PI*(.06+.88*u),se=Math.sin(al),B=isD?BSUN:BMOON,R=145,k=Math.pow(1-se,2);
+ B.position.set(-Math.cos(al)*R,se*R+2,-32);
+ if(isD){BSUN.material.color.setRGB(1,1-.32*k,1-.5*k);BSUN.scale.setScalar(62*(1+.3*k))}else BMOON.scale.setScalar(52*(1+.2*k));
+ sun.position.set(B.position.x*.4,Math.max(14,B.position.y*.4),B.position.z*.4)}
  EVS.visible=on;if(!on)return;const pal=EPAL();AUR.forEach((o,i)=>{const pos=o.gm.attributes.position,cl=o.gm.attributes.color;EC.set(pal[i%3]);EC2.set(pal[(i+1)%3]);for(let k=0;k<pos.count;k++){const col=k%35,top=k<35,w=Math.sin(col*.35+t*.8+i)*.5+.5;pos.setY(k,(top?25:-25)+Math.sin(col*.5+t*1.2+i*2)*(top?7:2));const kk=top?1:0;const r=(EC.r*w+EC2.r*(1-w))*kk*.9,g=(EC.g*w+EC2.g*(1-w))*kk*.9,b=(EC.b*w+EC2.b*(1-w))*kk*.9;cl.setXYZ(k,r,g,b)}pos.needsUpdate=true;cl.needsUpdate=true});
  HAL.forEach((o,i)=>{o.m.rotation.z=t*.15*o.s;o.m.material.color.set(pal[i%3]);o.m.material.opacity=.35+.2*Math.sin(t*2+i)})};
 setInterval(()=>{if(vis||curZ||document.hidden||!(EA()>=0||EV()))return;const pal=EPAL(),a=yaw+Math.PI+(Math.random()-.5)*1.5,d=95+Math.random()*40,fx=P.pos.x+Math.sin(a)*d,fz=P.pos.z+Math.cos(a)*d,fy=16+Math.random()*26,N=80,pg=new THREE.BufferGeometry(),ps=new Float32Array(N*3);for(let i=0;i<N;i++){const u=Math.random()*6.283,v=Math.acos(2*Math.random()-1),r=.6+Math.random()*.4;ps.set([Math.sin(v)*Math.cos(u)*r,Math.cos(v)*r,Math.sin(v)*Math.sin(u)*r],i*3)}pg.setAttribute('position',new THREE.BufferAttribute(ps,3));const mt=new THREE.PointsMaterial({color:pal[Math.random()*3|0],size:3.4,transparent:true,blending:THREE.AdditiveBlending,depthWrite:false,fog:false}),pt=new THREE.Points(pg,mt);pt.position.set(fx,fy,fz);eff(pt,1.8,(q,k)=>{q.scale.setScalar(1+k*13);q.material.opacity=1-k*k});snd(220+Math.random()*200,.25,'triangle',.03,-120)},1100);
@@ -1836,12 +1859,12 @@ function restore(g){if(vis)leaveVisit();CR.forEach(c=>scene.remove(c.h));CR=[];
  for(let i=0;i<8;i++)spawnC();banner('自分の世界へ戻りました','#fff');arp([523,659])}
 const _ln=leaveNet;
 leaveNet=function(){const g=GW,wasHost=net.host;GW=null;_ln();if(wasHost)sbq(`invites?from_id=eq.${S.uid}&status=eq.open`,'PATCH',{status:'closed'});if(g)restore(g)};
-function joinByCode(code,name){if(net.on||net.peer)leaveNet();nameIn();
- const pr=net.peer=new Peer();
- pr.on('open',id=>{net.me=id;net.hostId='cto-'+code;const c=pr.connect(net.hostId);
-  c.on('open',()=>{net.hc=c;net.on=1;GW={host:name||'フレンド',code,z:curZ,x:P.pos.x,pz:P.pos.z};banner((name||'フレンド')+' の世界へ！','#ffd34d');arp([523,659,784]);setTimeout(()=>gotoHost(true),1600)});
-  c.on('data',handle);c.on('close',()=>{toast('世界が閉じられました');leaveNet()})});
- pr.on('error',()=>{toast('接続できません（部屋が閉じたかも）');leaveNet()})}
+function joinByCode(code,name){if(net.on||net.peer)leaveNet();if(!peerOk())return;nameIn();
+ let done=0;const pr=net.peer=new Peer(undefined,PCFG),to=setTimeout(()=>{if(!done){toast('接続できません（タイムアウト）');leaveNet()}},15000);
+ pr.on('open',id=>{net.me=id;net.hostId='cto-'+code;const c=pr.connect(net.hostId,{reliable:true});
+  c.on('open',()=>{done=1;clearTimeout(to);net.hc=c;net.on=1;GW={host:name||'フレンド',code,z:curZ,x:P.pos.x,pz:P.pos.z};banner((name||'フレンド')+' の世界へ！','#ffd34d');arp([523,659,784]);setTimeout(()=>gotoHost(true),1600)});
+  c.on('data',handle);c.on('close',()=>{toast('世界が閉じられました');leaveNet()});c.on('error',()=>{})});
+ pr.on('error',e=>{clearTimeout(to);toast(netErr(e)+(e&&e.type=='peer-unavailable'?'（部屋が閉じたかも）':''));if(!done)leaveNet()})}
 
 /* ---------- top pill: where am I / go back ---------- */
 const gw=document.createElement('div');gw.id='gw';$('hud').appendChild(gw);let gk='';

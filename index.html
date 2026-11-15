@@ -549,6 +549,8 @@ const EX=(()=>{const c=document.createElement('canvas');c.width=c.height=64;cons
 function spawnE(){const[x0,z]=rp(curZ?16:36,curZ==14?96:curZ?70:130),x=x0+ZC[curZ];if(dist2(x,z,P.pos.x,P.pos.z)<25)return;const e=mkE();e.h.position.set(x,H(x,z),z);scene.add(e.h);EN.push(e)}
 /* input */
 const K={},J={x:0,y:0};let jid=null,cid=null,lx=0,ly=0;
+/* FIX: 入力欄でタイプ中・メニュー表示中はゲーム操作キー(E採取/F道具/数字/Tab/Space/移動)を無効化 */
+(()=>{const ed=t=>t&&(t.tagName=='INPUT'||t.tagName=='TEXTAREA'||t.tagName=='SELECT'||t.isContentEditable);const blk=e=>{if(e.code=='Escape'||e.key=='Escape')return;if(ed(e.target)){e.stopPropagation();return}const m=document.getElementById('modal');if(m&&m.classList.contains('on')&&e.type=='keydown'&&/^(KeyE|KeyF|Digit[1-4]|Tab|Space)$/.test(e.code)){e.stopPropagation();if(e.code=='Space'||e.code=='Tab')e.preventDefault()}};addEventListener('keydown',blk,true);addEventListener('keyup',e=>{if(ed(e.target))e.stopPropagation()},true);addEventListener('focusin',e=>{if(ed(e.target))for(const k in K)K[k]=0})})();
 addEventListener('keydown',e=>{K[e.code]=1;if(e.code=='KeyE')col();if(e.code=='KeyF')useTool();if(e.code=='Tab'){e.preventDefault();openMenu('dex')}if(e.code=='Digit1')selT(0);if(e.code=='Digit2')selT(1)});addEventListener('keyup',e=>K[e.code]=0);
 const joy=$('joy'),kn=$('knob');
 joy.addEventListener('pointerdown',e=>{jid=e.pointerId;joy.setPointerCapture(jid);jm(e)});joy.addEventListener('pointermove',e=>{if(e.pointerId==jid)jm(e)});
@@ -1137,7 +1139,9 @@ tab=function(t){if(t=='net')t='fr';if(t=='trade')t='trade2';curTab=t;$('mt').tex
   else{h=H2('フレンドと安全に交換<br>'+SM('出したキャラは預かり、成立か中止で確定します'),'')+FR.fs.map(id=>H2('👤 '+nmP(id),B2('提示する','offer',id,null,'c'))).join('');
    FR.tr.filter(r=>r.status=='open'||r.status=='countered').forEach(r=>{const mine=r.from_id==u;if(mine)h+=H2(`📤 ${nmP(r.to_id)}へ ${nmK(r.give)}<br>${SM(r.status=='countered'?'相手の提示: '+nmK(r.want):'返事待ち')}`,(r.status=='countered'?B2('成立','tf',r.id):'')+' '+B2('取消','tx',r.id,null,'r'));else if(r.status=='open')h+=H2(`📥 ${nmP(r.from_id)} が ${nmK(r.give)} を提示`,B2('応じる','tw',r.id)+' '+B2('断る','tx',r.id,null,'r'))});if(SBE)h+=''+diagH()+''}}
  else return _tab(t);
- m.innerHTML=h;m.querySelectorAll('[data-a]').forEach(b=>b.onclick=()=>act(b.dataset.a,b.dataset.v,b.dataset.w))};
+ const _sv={};['fc','nm'].forEach(i=>{const o=m.querySelector('#'+i);if(o&&t=='fr')_sv[i]=[o.value,document.activeElement===o,o.selectionStart,o.selectionEnd]});
+ m.innerHTML=h;m.querySelectorAll('[data-a]').forEach(b=>b.onclick=()=>act(b.dataset.a,b.dataset.v,b.dataset.w));
+ for(const i in _sv){const n=m.querySelector('#'+i),[v,f,a,b]=_sv[i];if(!n)continue;if(i=='fc'&&v)n.value=v;if(f){n.focus();try{n.setSelectionRange(a,b)}catch(_){}}}};
 function openMenu(t){$('modal').classList.add('on');tab(t);snd(500,.1,'sine',.06);if(t=='fr'||t=='trade2')poll()}
 const NA={
  hd(k){const s=(S.dm?S.disp:dispK()).filter(x=>allK().includes(x));S.dm=1;const i=s.indexOf(k);if(i>=0)s.splice(i,1);else if(s.length<dsN())s.push(k);else toast('展示は'+dsN()+'体まで（♻再生で増えます）');S.disp=s;rebuildDisp();snd(600,.08,'square',.05)},

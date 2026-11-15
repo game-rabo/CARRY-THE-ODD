@@ -1099,7 +1099,7 @@ const isD=g=>dispL.some(d=>d.g===g)||dispV.some(d=>d.g===g);
 SP.forEach((sp,idx)=>{if(idx>=HALF)return;const b0=sp.b,i0=sp.i,h0=hs(sp.id),PZ=PRS[h0%7],v=h0>>3,n=[2,3,3,4,5,6,6][Math.min(6,sp.r)];sp.b0=1;
 sp.b=g=>{const sv=window.__voxSph;window.__voxSph=bSph;try{b0(g)}finally{window.__voxSph=sv}brick(g);const bb=new THREE.Box3().setFromObject(g),R=Math.min(2.8,Math.max(1.2,(bb.max.x-bb.min.x)*.55)),H=Math.max(2,bb.max.y),fg=new THREE.Group();g.add(fg);g.userData.fxg=fg;g.userData.fxu=PZ.k.slice(0,n).map((k,i)=>{const kg=new THREE.Group();fg.add(kg);return[kg,FXK[k](kg,R,H,PZ.c,v+i)]})};
 sp.i=(g,t)=>{i0(g,t);const U=g.userData,F=U.fxu;if(!F)return;const h=g.parent,D=isD(g),cg=h&&h.parent===cart,far=!D&&h&&h.parent===scene&&Math.hypot(h.position.x-P.pos.x,h.position.z-P.pos.z)>40,mid=!D&&h&&h.parent===scene&&Math.hypot(h.position.x-P.pos.x,h.position.z-P.pos.z)>22;U.fxg.visible=!(cg||far);if(cg||far)return;upRB(t);F.forEach(([kg,f],i)=>{kg.visible=!(mid&&i>1);if(kg.visible)f(t)});
-if(D){const ph=t%8,k=ph<1.6?ph/1.6:-1,e=k<0?0:3*k*k-2*k*k*k,pk=k<0?0:Math.sin(k*3.1416);h.rotation.y=Math.sin(t*.5)*.5+e*6.283;g.position.y+=pk*1.1;g.scale.setScalar(1+pk*.12);U.fxg.scale.setScalar(1+pk*.35);
+if(D){const ph=t%8,k=ph<1.6?ph/1.6:-1,e=k<0?0:3*k*k-2*k*k*k,pk=k<0?0:Math.sin(k*3.1416);h.rotation.y=Math.sin(t*.5)*.5+e*6.283;if(U.hy==null)U.hy=h.position.y;h.position.y=U.hy+pk*.55;g.scale.setScalar(1+pk*.1);U.fxg.scale.setScalar(1+pk*.35);
 if(!U.dg){const d=new THREE.Group();U.dg=d;U.cf=[0,1,2,3,4,5,6,7,8,9].map(i=>Q(d,.16,.16,.16,PZ.c[i%2],0,0,0));g.add(d)}
 U.cf.forEach((c,i)=>{const u=(t*.4+i/10)%1,a=i*.63+t;c.position.set(Math.cos(a)*1.6,u*5,Math.sin(a)*1.6);c.rotation.set(t*3,t*2,0)})}}});
 

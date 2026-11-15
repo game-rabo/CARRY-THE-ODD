@@ -1179,7 +1179,7 @@ const T=[
 ['ouroboroszero','ウロボロス・ゼロ',6,[8,7],[3],'始まりも終わりもない輪の竜。','dino','#18f0d0','#ff6bd6','#ffd23a','halo'],
 ['sekainotane','セカイノタネ',6,[8,7,6],[3],'すべての世界のはじまりの種。','flower','#ffffff','#ffd23a','#18f0d0','crown']];
 T.forEach(([id,n,r,ar,t,d,a,A,B,C,ac])=>{if(typeof SP!='undefined'&&SP.some(q=>q.id==id))return;
-SP.push({id,n,r,ar,t,h:ar.map(x=>AN[x].replace('エリア','')).join('・')+' / '+t.map(x=>PN[x]).join('・'),d,b(g){const top=AR[a](g,A,B,C);AC[ac](g,top,C)},i:AI[a]||((g,t)=>{g.position.y=Math.abs(Math.sin(t*3))*.1;g.rotation.z=Math.sin(t*2)*.06})})});
+SP.push({id,n,r,ar,t,h:ar.map(x=>AN[x].replace('エリア','')).join('・')+' / '+t.map(x=>PN[x]).join('・'),d,b(g){const sv=window.__voxSph;window.__voxSph=bSph;try{const top=AR[a](g,A,B,C);AC[ac](g,top,C)}finally{window.__voxSph=sv}brick(g)},i:AI[a]||((g,t)=>{g.position.y=Math.abs(Math.sin(t*3))*.1;g.rotation.z=Math.sin(t*2)*.06})})});
 })();
 
 /* ===== REFERENCE STYLE LAYER: レアリティ色オーラ + ネームプレート ===== */

@@ -279,6 +279,20 @@ canvas.mg{position:static;inset:auto;width:100%;max-width:300px;height:auto;marg
 #rleg{display:flex;flex-wrap:wrap;gap:9px;margin:2px 0 12px}
 #mc .rchip{--bw:3px;display:inline-block;padding:2px 9px;border-radius:12px;font-size:12px;-webkit-text-stroke:3px #151515;paint-order:stroke fill}
 @media(prefers-reduced-motion:reduce){#mc [data-rf],#mc [data-rf]::before,#mc [data-rf]::after{animation:none!important}}
+
+/* ===== B18: notifications / room pill / auto reload ===== */
+#dock .dk[data-t=notif]{background:linear-gradient(#ff9bd6,#d63a9a)}
+.nbdg{position:absolute;right:-7px;top:-9px;min-width:22px;height:22px;padding:0 5px;border-radius:11px;background:#ff3b30;border:3px solid var(--ink);font-size:12px;line-height:16px;text-align:center;-webkit-text-stroke:0;color:#fff;font-style:normal;display:none;font-family:system-ui,sans-serif;font-weight:800}
+.nbdg.on{display:block;animation:nbp .8s ease-in-out infinite alternate}
+@keyframes nbp{to{transform:scale(1.18)}}
+.ntH{margin:12px 0 6px;font-size:16px;display:flex;align-items:center;gap:6px}
+.ntE{padding:4px 6px 8px}
+.nw{display:inline-block;background:#ff3b30;border:2px solid var(--ink);border-radius:8px;font-size:10px;padding:0 5px;-webkit-text-stroke:0;margin-left:4px;vertical-align:middle;color:#fff}
+#gw{left:50%;transform:translateX(-50%);display:none;flex-direction:column;align-items:center;gap:4px;padding:5px 9px 7px;border-radius:14px;font-size:12px;white-space:nowrap;max-width:96%;
+ background:linear-gradient(#7a5cff,#3f23c0);border:3px solid var(--ink);box-shadow:0 4px 0 var(--ink),inset 0 0 0 2px rgba(255,225,77,.7);-webkit-text-stroke:3px var(--ink);paint-order:stroke fill;z-index:3}
+#gw .r2{display:flex;gap:6px}
+#gw .b{font-size:12px;padding:3px 9px;border-width:3px!important;box-shadow:0 3px 0 var(--ink),inset 0 3px 0 rgba(255,255,255,.5)!important}
+#arov{position:fixed;inset:0;z-index:99;background:rgba(26,10,70,.94);display:flex;align-items:center;justify-content:center;color:#fff;font-size:22px;-webkit-text-stroke:5px var(--ink);paint-order:stroke fill}
 </style></head><body>
 <canvas id="c"></canvas>
 <div id="hud" class="st">
@@ -1772,6 +1786,119 @@ tab=function(t){const r=prev(t);
   cs.forEach((c,i)=>{let k=RGB.indexOf(c.style.borderColor);if(k<0&&cs.length==SP.length&&SP[i])k=SP[i].r;if(k>=0)c.dataset.rf=k});
   if(!m.querySelector('#rleg'))m.insertAdjacentHTML('afterbegin',`<div id="rleg">${RN.map((n,i)=>`<span class="rchip" data-rf="${i}">${n}</span>`).join('')}</div><div class="sm" style="margin:-6px 0 10px">枠でレア度がわかる：銀＝Common／緑＝Uncommon／青く光る＝Rare／しましま＝Epic／金色に輝く＝Legendary／ゆっくり色が変わる＝Mythic／虹色＝Secret</div>`)}
  return r};
+})();
+
+/* ===== B18: notifications / friend-world invites / auto reload ===== */
+(()=>{
+const APPV='B18',AR_MS=300000;
+try{const u=new URL(location.href);if(u.searchParams.has('r')){u.searchParams.delete('r');history.replaceState(null,'',u.pathname+u.search+u.hash)}}catch(e){}
+const UPD=[
+ {id:18,t:'B18 通知タブ・フレンド招待・自動リロード',d:'通知タブを追加（アプデ報告／フレンド申請／ワールド招待）。5分以上アプリを開かないと自動で最新版にリロードします。招待された世界から「自分の世界へ戻る」ボタンで戻れます。'},
+ {id:17,t:'B17 図鑑の枠がレア度で変化',d:'銀→緑→青く光る→しましま→金色に輝く→ゆっくり色が変わる→虹色。枠だけでレア度がわかります。'},
+ {id:16,t:'B16 サーバー接続の診断',d:'フレンド／交換メニューに「診断する」を追加。失敗の理由が表示されます。'},
+ {id:14,t:'B14 新エリア・新施設・新キャラ',d:'虹のネオン遊園地(Lv48)、ランキング塔・整備工場・ラッキーくじ・カフェ・ぎんこう、新キャラ30体を追加。'},
+ {id:13,t:'B13 ポップな見た目に刷新',d:'ステージ装飾、虹のアーチ、風船、ボタンUIをリニューアル。'}];
+const E=x=>String(x==null?'':x).replace(/[<>&"']/g,'');
+const ago=iso=>{const m=Math.max(0,Math.round((Date.now()-new Date(iso).getTime())/60000));return m<1?'たった今':m<60?m+'分前':Math.round(m/60)+'時間前'};
+const sbq=async(p,m='GET',b,pf)=>{try{const r=await fetch(SBU+p,{method:m,headers:{apikey:SBK,'Content-Type':'application/json',Prefer:pf||'return=representation'},body:b?JSON.stringify(b):undefined});if(!r.ok){let j={};try{j=await r.json()}catch(_){}return{err:r.status,code:j.code||''}}const t=await r.text();return t?JSON.parse(t):[]}catch(e){return{err:0}}};
+let INV=[],NTC=[],GW=null,ERR='',SENT=new Set(),snap={u:0,s:0},ntOpen=false;
+Object.assign(TT,{notif:'🔔 通知',invite:'📨 友達を招待'});
+
+/* ---------- badge on dock ---------- */
+const btn=document.createElement('button');btn.className='b c dk';btn.dataset.t='notif';btn.innerHTML='<i>🔔</i><span>🔔通知</span>';
+const bdg=document.createElement('i');bdg.className='nbdg';btn.appendChild(bdg);btn.onpointerdown=()=>openMenu('notif');$('dock').prepend(btn);
+const unreadU=()=>UPD.filter(u=>u.id>(S.nSeen|0)).length+NTC.filter(n=>n.id>(S.nSrv|0)).length;
+const total=()=>unreadU()+FR.pend.length+INV.length;
+let sig='';
+function refresh(){const n=total();bdg.textContent=n>9?'9+':n;bdg.classList.toggle('on',n>0);
+ const s=INV.map(x=>x.id).join()+'|'+FR.pend.join()+'|'+NTC.length;
+ if(s!==sig){sig=s;if(ntOpen&&curTab=='notif'&&$('modal').classList.contains('on')&&!(document.activeElement&&document.activeElement.tagName=='INPUT'))tab('notif')}}
+setInterval(()=>{if(!$('modal').classList.contains('on')||curTab!='notif')ntOpen=false;refresh()},1500);
+
+/* ---------- polling invites / server notices ---------- */
+let skip=0,fails=0,first=1,pnc=0;const seenInv=new Set();
+async function pollN(){if(document.hidden)return;if(skip>0){skip--;return}
+ const since=encodeURIComponent(new Date(Date.now()-30*60000).toISOString());
+ const iv=await sbq(`invites?to_id=eq.${S.uid}&status=eq.open&created_at=gt.${since}&order=id.desc&limit=10&select=*`);
+ if(Array.isArray(iv)){fails=0;ERR='';INV=iv.filter(x=>x.room);iv.forEach(x=>{if(!seenInv.has(x.id)){seenInv.add(x.id);if(!first){toast(`📨 ${x.from_name||'フレンド'} から世界への招待！（通知タブ）`);arp([659,880,1175,1568])}}})}
+ else{ERR=iv.err+(iv.code?' '+iv.code:'');fails=Math.min(fails+1,6);skip=fails*2}
+ if(first||(pnc++%5==0)){const nt=await sbq('notices?select=id,title,body,created_at&order=id.desc&limit=10');if(Array.isArray(nt))NTC=nt}
+ first=0;refresh()}
+setInterval(pollN,8000);setTimeout(pollN,2500);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)setTimeout(pollN,300)});
+
+/* ---------- join / leave a friend's world ---------- */
+function gotoHost(silent){const r=RP[net.hostId];if(!r){if(!silent)toast('ホストの位置がまだわかりません');return}
+ const t=r.tg,z=t.x>800?Math.round(t.x/500)+1:0,x=t.x+3,zz=t.z+3;
+ if(z!=curZ)warp(z,x,zz);else{P.pos.set(x,H(x,zz)+.1,zz);P.vy=0;cp.set(x,0,zz+4)}}
+function restore(g){if(vis)leaveVisit();CR.forEach(c=>scene.remove(c.h));CR=[];
+ if(g.z!=curZ)warp(g.z,g.x,g.pz);else{P.pos.set(g.x,H(g.x,g.pz)+.1,g.pz);P.vy=0;cp.set(g.x,0,g.pz+4)}
+ for(let i=0;i<8;i++)spawnC();banner('自分の世界へ戻りました','#fff');arp([523,659])}
+const _ln=leaveNet;
+leaveNet=function(){const g=GW,wasHost=net.host;GW=null;_ln();if(wasHost)sbq(`invites?from_id=eq.${S.uid}&status=eq.open`,'PATCH',{status:'closed'});if(g)restore(g)};
+function joinByCode(code,name){if(net.on||net.peer)leaveNet();nameIn();
+ const pr=net.peer=new Peer();
+ pr.on('open',id=>{net.me=id;net.hostId='cto-'+code;const c=pr.connect(net.hostId);
+  c.on('open',()=>{net.hc=c;net.on=1;GW={host:name||'フレンド',code,z:curZ,x:P.pos.x,pz:P.pos.z};banner((name||'フレンド')+' の世界へ！','#ffd34d');arp([523,659,784]);setTimeout(()=>gotoHost(true),1600)});
+  c.on('data',handle);c.on('close',()=>{toast('世界が閉じられました');leaveNet()})});
+ pr.on('error',()=>{toast('接続できません（部屋が閉じたかも）');leaveNet()})}
+
+/* ---------- top pill: where am I / go back ---------- */
+const gw=document.createElement('div');gw.id='gw';$('hud').appendChild(gw);let gk='';
+gw.onpointerdown=e=>{const a=e.target.closest('[data-g]');if(!a)return;const k=a.dataset.g;
+ if(k=='home')leaveNet();else if(k=='near')gotoHost();else if(k=='inv')openMenu('invite');else if(k=='close')leaveNet()};
+setInterval(()=>{if(!net.on){gw.style.display='none';gk='';return}
+ const n=Object.keys(RP).length+1,host=!!net.host,k=(host?'h':'g')+n+(GW?GW.host:'');
+ gw.style.top=vis?'calc(194px + env(safe-area-inset-top))':'calc(134px + env(safe-area-inset-top))';gw.style.display='flex';
+ if(k===gk)return;gk=k;
+ gw.innerHTML=host?`<span>🏠 あなたの世界 ・${n}人</span><div class="r2"><button class="b g" data-g="inv">招待</button><button class="b r" data-g="close">閉じる</button></div>`
+  :`<span>🌐 ${E(GW?GW.host:'フレンド')}の世界 ・${n}人</span><div class="r2"><button class="b c" data-g="near">そばへ</button><button class="b r" data-g="home">自分の世界へ戻る</button></div>`},400);
+
+/* ---------- tabs ---------- */
+const prev=tab;
+tab=function(t){
+ if(t!='notif'&&t!='invite')return prev(t);
+ curTab=t;$('mt').textContent=TT[t];const m=$('mc');let h='';
+ if(t=='notif'){
+  if(!ntOpen){snap={u:S.nSeen|0,s:S.nSrv|0};ntOpen=true}
+  h+=H2('友達を世界に招待<br>'+SM(net.host?'あなたの世界に友達を呼べます':'部屋を作ると友達を呼べます'),B2('招待','n_inv',null,null,'g'));
+  h+=`<div class="ntH">📨 世界への招待 (${INV.length})</div>`;
+  h+=INV.length?INV.map(x=>H2(`${E(x.from_name||'フレンド')} があなたを招待<br>${SM(ago(x.created_at)+' ・ 部屋 '+E(x.room))}`,B2('参加','n_join',x.id,null,'g')+' '+B2('無視','n_ign',x.id,null,'r'))).join(''):'<div class="sm ntE">招待はありません</div>';
+  h+=`<div class="ntH">🤝 フレンド申請 (${FR.pend.length})</div>`;
+  h+=FR.pend.length?FR.pend.map(id=>H2(`${E(nmP(id))} から申請`,B2('承認','fok',id)+' '+B2('却下','fno',id,null,'r'))).join(''):'<div class="sm ntE">申請はありません</div>';
+  h+='<div class="ntH">📢 お知らせ</div>';
+  h+=NTC.map(n=>H2(`<b>${E(n.title)}</b>${n.id>snap.s?'<span class="nw">NEW</span>':''}<br>${SM(E(n.body))}`,'')).join('');
+  h+=UPD.map(u=>H2(`<b>${E(u.t)}</b>${u.id>snap.u?'<span class="nw">NEW</span>':''}<br>${SM(E(u.d))}`,'')).join('');
+  h+=`<div class="ntH">⚙ 設定</div>`+H2(`自動リロード<br>${SM('5分以上開かなかったら最新版を読み込みます')}`,B2(S.noAR?'OFF':'ON','n_ar',null,null,S.noAR?'r':'g'));
+  h+=`<div class="sm ntE">${APPV}${ERR?' ／ 招待サーバー: '+E(ERR)+'（招待機能はSQLの再実行が必要かも）':''}</div>`;
+  S.nSeen=Math.max(S.nSeen|0,...UPD.map(u=>u.id));S.nSrv=Math.max(S.nSrv|0,...NTC.map(n=>n.id));save();
+ }else{
+  const n=Object.keys(RP).length+1;
+  if(!net.host)h+=H2('まだ部屋がありません<br>'+SM('部屋を作ると、友達があなたの世界に参加できます'),B2('部屋を作る','i_host',null,null,'g'));
+  else{h+=H2(`🏠 あなたの世界 ・${n}人<br>${SM('部屋コード '+E(net.me.slice(4))+' ／ 招待は30分有効')}`,B2('閉じる','i_close',null,null,'r'));
+   h+=FR.fs.length?FR.fs.map(id=>H2(`${E(nmP(id))} <small class="sm">Lv${FR.prof[id]?FR.prof[id].lv:'?'}</small>`,B2(SENT.has(id)?'送信済み':'招待','i_send',id,null,SENT.has(id)?'c':'g'))).join(''):'<div class="sm ntE">フレンドがいません（フレンド画面で追加）</div>'}
+ }
+ m.innerHTML=h;
+ m.querySelectorAll('[data-a]').forEach(b=>b.onclick=async()=>{const a=b.dataset.a,v=b.dataset.v;
+  if(a=='fok'||a=='fno'){await NA[a](v);refresh();tab(t);return}
+  if(a=='n_inv'){openMenu('invite');return}
+  if(a=='n_ar'){S.noAR=S.noAR?0:1;save();tab(t);return}
+  if(a=='n_join'){const x=INV.find(q=>q.id==v);if(!x)return;sbq(`invites?id=eq.${v}`,'PATCH',{status:'accepted'});INV=INV.filter(q=>q.id!=v);closeM();refresh();joinByCode(x.room,x.from_name);return}
+  if(a=='n_ign'){sbq(`invites?id=eq.${v}`,'PATCH',{status:'declined'});INV=INV.filter(q=>q.id!=v);refresh();tab(t);return}
+  if(a=='i_host'){if(net.on)return toast('すでに参加中です');hostRoom();setTimeout(()=>{if(net.host&&$('modal').classList.contains('on'))tab('invite')},1500);return}
+  if(a=='i_close'){leaveNet();tab(t);return}
+  if(a=='i_send'){if(!net.host||!net.me)return;const r=await sbq('invites','POST',{from_id:S.uid,to_id:v,room:net.me.slice(4),from_name:S.name,status:'open'});
+   if(Array.isArray(r)){SENT.add(v);toast('招待を送った！');arp([659,880])}else toast('送信失敗'+(r.err?'（'+r.err+'：SQLを再実行してください）':''));tab(t)}})};
+
+/* ---------- auto reload after 5 min away ---------- */
+let hid=0,lastT=Date.now(),reloading=false;
+const doReload=()=>{if(reloading||S.noAR||navigator.onLine===false)return;reloading=true;save();
+ const o=document.createElement('div');o.id='arov';o.textContent='🔄 最新版を読み込み中…';document.body.appendChild(o);
+ setTimeout(()=>{try{const u=new URL(location.href);u.searchParams.set('r',Date.now());location.replace(u.toString())}catch(e){location.reload()}},400)};
+document.addEventListener('visibilitychange',()=>{if(document.hidden){hid=Date.now();save()}else{if(hid&&Date.now()-hid>=AR_MS)doReload();hid=0;lastT=Date.now()}});
+addEventListener('pagehide',()=>{hid=Date.now();save()});
+addEventListener('pageshow',()=>{if(hid&&Date.now()-hid>=AR_MS)doReload();hid=0;lastT=Date.now()});
+setInterval(()=>{const n=Date.now();if(!document.hidden&&n-lastT>AR_MS)doReload();lastT=n},5000);
 })();
 requestAnimationFrame(loop);
 </script></body></html>

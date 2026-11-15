@@ -240,6 +240,45 @@ canvas.mg{position:static;inset:auto;width:100%;max-width:300px;height:auto;marg
 @keyframes logo{from{transform:translateY(0) rotate(-1.5deg)}to{transform:translateY(-8px) rotate(1.5deg)}}
 #title p{background:rgba(26,16,51,.55);border:3px solid var(--ink);border-radius:14px;padding:10px 12px;-webkit-text-stroke:0;font-weight:700;text-shadow:0 2px 0 var(--ink)}
 #start{background:linear-gradient(#b8ff7a,#20b53c);animation:wob .6s ease-in-out infinite alternate}
+
+/* ===== B17: rarity frames for the dex ===== */
+#mc [data-rf]{--bw:5px;position:relative;border:var(--bw) solid transparent!important;background:linear-gradient(#5a3ee0,#3a249f) padding-box!important}
+#mc [data-rf]::before{content:"";position:absolute;inset:calc(var(--bw)*-1);border-radius:inherit;padding:var(--bw);pointer-events:none;
+ -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;
+ mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);mask-composite:exclude}
+/* 0 Common: plain silver */
+#mc [data-rf="0"]::before{background:#cfd8dc}
+/* 1 Uncommon: solid green + faint glow */
+#mc [data-rf="1"]::before{background:#7bd96b}
+#mc .cd[data-rf="1"]{box-shadow:0 4px 0 var(--ink),0 0 8px rgba(123,217,107,.55)!important}
+/* 2 Rare: blue, pulsing glow */
+#mc [data-rf="2"]::before{background:#4aa8ff}
+#mc .cd[data-rf="2"]{animation:rfg2 2.2s ease-in-out infinite}
+@keyframes rfg2{0%,100%{box-shadow:0 4px 0 var(--ink),0 0 4px rgba(74,168,255,.6)}50%{box-shadow:0 4px 0 var(--ink),0 0 18px 4px rgba(74,168,255,.95)}}
+/* 3 Epic: moving purple / pink stripes */
+#mc [data-rf="3"]::before{background:linear-gradient(45deg,#b85cff 25%,#ffd0ff 25%,#ffd0ff 50%,#b85cff 50%,#b85cff 75%,#ffd0ff 75%);background-size:24px 24px;animation:rfs 1.1s linear infinite}
+@keyframes rfs{to{background-position:24px 0}}
+/* 4 Legendary: gold shimmer sweep + glow */
+#mc [data-rf="4"]::before{background:linear-gradient(105deg,#a86000 0%,#ffd34d 28%,#fffbe0 42%,#ffd34d 56%,#a86000 100%);background-size:260% 100%;animation:rfsh 2.2s ease-in-out infinite alternate}
+@keyframes rfsh{from{background-position:0% 0}to{background-position:100% 0}}
+#mc .cd[data-rf="4"]{animation:rfg4 2.2s ease-in-out infinite}
+@keyframes rfg4{0%,100%{box-shadow:0 4px 0 var(--ink),0 0 8px rgba(255,184,48,.6)}50%{box-shadow:0 4px 0 var(--ink),0 0 22px 5px rgba(255,214,90,1)}}
+/* 5 Mythic: slowly changing colour + stripes of light */
+#mc [data-rf="5"]::before{background:linear-gradient(135deg,#ff4f6d 0%,#ff9a3a 50%,#ff4f6d 100%);animation:rfh 9s linear infinite}
+@keyframes rfh{to{filter:hue-rotate(360deg)}}
+#mc .cd[data-rf="5"]{animation:rfg5 9s linear infinite}
+@keyframes rfg5{0%,100%{box-shadow:0 4px 0 var(--ink),0 0 16px 3px rgba(255,79,109,.9)}17%{box-shadow:0 4px 0 var(--ink),0 0 16px 3px rgba(255,170,60,.9)}34%{box-shadow:0 4px 0 var(--ink),0 0 16px 3px rgba(120,230,90,.9)}51%{box-shadow:0 4px 0 var(--ink),0 0 16px 3px rgba(60,200,255,.9)}68%{box-shadow:0 4px 0 var(--ink),0 0 16px 3px rgba(130,100,255,.9)}85%{box-shadow:0 4px 0 var(--ink),0 0 16px 3px rgba(255,90,220,.9)}}
+/* 6 Secret: rainbow flowing + glow + sparkle */
+#mc [data-rf="6"]::before{background:linear-gradient(90deg,#ff4f6d,#ffb830,#7bd96b,#18f0d0,#4aa8ff,#b85cff,#ff4f6d);background-size:300% 100%;animation:rfr 5s linear infinite}
+@keyframes rfr{to{background-position:300% 0}}
+#mc .cd[data-rf="6"]{animation:rfg5 5s linear infinite}
+#mc .cd[data-rf="6"]::after,#mc .cd[data-rf="4"]::after{content:"✦";position:absolute;right:7px;top:3px;font-size:17px;color:#fff;text-shadow:0 0 6px #fff,0 0 12px #ffe14d;-webkit-text-stroke:0;animation:rftw 1.3s ease-in-out infinite;pointer-events:none}
+#mc .cd[data-rf="4"]::after{font-size:14px;animation-delay:.4s}
+@keyframes rftw{0%,100%{opacity:.25;transform:scale(.7) rotate(0)}50%{opacity:1;transform:scale(1.15) rotate(35deg)}}
+/* legend chips */
+#rleg{display:flex;flex-wrap:wrap;gap:9px;margin:2px 0 12px}
+#mc .rchip{--bw:3px;display:inline-block;padding:2px 9px;border-radius:12px;font-size:12px;-webkit-text-stroke:3px #151515;paint-order:stroke fill}
+@media(prefers-reduced-motion:reduce){#mc [data-rf],#mc [data-rf]::before,#mc [data-rf]::after{animation:none!important}}
 </style></head><body>
 <canvas id="c"></canvas>
 <div id="hud" class="st">
@@ -1722,6 +1761,17 @@ NA.diag=async()=>{DG=['診断中…'];if($('modal').classList.contains('on'))tab
  for(const t of ['profiles','friends','trades']){try{const r=await fetch(SBU+t+'?select=*&limit=1',{headers:{apikey:SBK}});if(r.ok)out.push('✅ '+t+' 読み取りOK');else{let j={};try{j=await r.json()}catch(_){}out.push('❌ '+t+' '+r.status+' '+(j.code||'')+' '+(j.message||'')+' → '+(why({st:r.status,code:j.code})||''))}}catch(e){out.push('❌ '+t+' 通信失敗 → '+why({st:0}))}}
  try{const r=await sb('profiles?on_conflict=id','POST',{id:S.uid,code:S.code,name:S.name,lv:S.lv,updated_at:new Date().toISOString()},'resolution=merge-duplicates,return=minimal');out.push(r?'✅ profiles 書き込みOK':'❌ profiles 書き込み失敗 '+(SBL?SBL.st+' '+SBL.code+' '+SBL.msg:''))}catch(e){out.push('❌ profiles 書き込み失敗')}
  DG=out;if($('modal').classList.contains('on'))tab(curTab)};
+})();
+
+/* ===== B17: tag dex cards with their rarity (drives the frame styles) ===== */
+(()=>{
+const RGB=RC.map(c=>{const n=parseInt(c.slice(1),16);return `rgb(${n>>16}, ${(n>>8)&255}, ${n&255})`});
+const prev=tab;
+tab=function(t){const r=prev(t);
+ if(t=='dex'){const m=$('mc'),cs=[...m.querySelectorAll('.cd')];
+  cs.forEach((c,i)=>{let k=RGB.indexOf(c.style.borderColor);if(k<0&&cs.length==SP.length&&SP[i])k=SP[i].r;if(k>=0)c.dataset.rf=k});
+  if(!m.querySelector('#rleg'))m.insertAdjacentHTML('afterbegin',`<div id="rleg">${RN.map((n,i)=>`<span class="rchip" data-rf="${i}">${n}</span>`).join('')}</div><div class="sm" style="margin:-6px 0 10px">枠でレア度がわかる：銀＝Common／緑＝Uncommon／青く光る＝Rare／しましま＝Epic／金色に輝く＝Legendary／ゆっくり色が変わる＝Mythic／虹色＝Secret</div>`)}
+ return r};
 })();
 requestAnimationFrame(loop);
 </script></body></html>

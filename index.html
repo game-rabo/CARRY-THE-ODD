@@ -325,126 +325,6 @@ canvas.mg{position:static;inset:auto;width:100%;max-width:300px;height:auto;marg
 #hud #tools{left:50%!important;transform:translateX(-50%)!important;flex-direction:row!important;bottom:calc(14px + env(safe-area-inset-bottom))!important;gap:6px!important}
 #hud .tl{width:52px!important;height:52px!important;border-radius:8px!important;opacity:1!important;background:linear-gradient(#34363f,#1c1d24)!important;border:3px solid #0a0a10!important;box-shadow:0 3px 0 #0a0a10!important}
 #hud .tl.on{border-color:#fff!important;filter:brightness(1.35)}
-
-/* ===== B22: 参考画像に寄せたロブロックス風UI第2弾 ===== */
-:root{--nv:#0b2a5a;--bn:#1a0f06}
-/* --- 左メニュー: アイコンタイル(2列)を左カラムへ --- */
-#lcol #dock{position:static!important;display:grid!important;grid-template-columns:repeat(2,56px)!important;gap:6px!important;width:auto!important;pointer-events:auto}
-#lcol #dock button.dk{width:56px!important;height:60px!important;padding:2px 0 0!important;flex-direction:column;gap:0!important;border:3px solid #0b1a33!important;border-radius:10px!important;box-shadow:0 3px 0 #0b1a33,inset 0 3px 0 rgba(255,255,255,.4)!important;-webkit-text-stroke:2.5px #0b1a33!important}
-#lcol #dock button.dk i{display:block!important;width:32px!important;height:32px!important;line-height:0;font-size:0!important}
-#lcol #dock button.dk i svg{width:100%;height:100%;overflow:visible}
-#lcol #dock button.dk span{flex:none!important;font-size:10px!important;line-height:1;margin-top:1px}
-#lcol #dock button.dk[data-t=dex]{background:linear-gradient(#8bf06f,#2fae3f)!important}
-#lcol #dock button.dk[data-t=reb]{background:linear-gradient(#7fe0ff,#2a76f0)!important}
-#lcol #dock button.dk[data-t=road]{background:linear-gradient(#ffe36b,#e0a000)!important}
-#lcol #dock button.dk[data-t=mini]{background:linear-gradient(#ffb86b,#e8601c)!important}
-#lcol #dock button.dk[data-t=notif]{background:linear-gradient(#ff9bd6,#d63a9a)!important}
-#lcol #dock button.dk[data-t=set]{background:linear-gradient(#aab4c4,#5d6878)!important}
-#lcol #dock button.dk[data-t=quest]{display:flex!important;background:linear-gradient(#ff8f8f,#d9342f)!important}
-/* レベルは丸バッジのみ、バーは下へ */
-#lcol #xpw{display:none}
-/* --- 左下: 通貨(大きな緑の所持金) --- */
-#lcol #res{position:fixed!important;left:calc(12px + env(safe-area-inset-left));bottom:calc(122px + env(safe-area-inset-bottom));flex-direction:column-reverse!important;gap:3px!important}
-#lcol .cur.coin span{font-size:28px}
-/* --- 下: 幅広のレベルバー(茶+金) --- */
-#lvbar{left:50%;transform:translateX(-50%);bottom:calc(76px + env(safe-area-inset-bottom));width:min(88%,330px);height:34px;border-radius:10px;background:#5a3b1c;border:4px solid var(--bn);box-shadow:0 3px 0 var(--bn),inset 0 3px 0 rgba(0,0,0,.25);overflow:hidden}
-#lvbar i{position:absolute;inset:0 auto 0 0;width:0;background:linear-gradient(#ffe27a,#e89a1c);transition:width .3s;box-shadow:inset 0 4px 0 rgba(255,255,255,.4)}
-#lvbar b,#lvbar u{position:absolute;top:0;bottom:0;display:flex;align-items:center;font-size:15px;text-decoration:none;-webkit-text-stroke:4px var(--bn);paint-order:stroke fill}
-#lvbar b{left:10px}#lvbar u{right:10px;font-size:13px}
-/* --- 右: 赤いショップボタン --- */
-#bShop{right:calc(10px + env(safe-area-inset-right));top:calc(var(--mm) + 28px + env(safe-area-inset-top));width:var(--mm);height:42px;padding:0;font-size:16px;background:linear-gradient(#ff7a7a,#c91f2c)!important;display:flex;align-items:center;justify-content:center;gap:6px;-webkit-text-stroke:4px #10131c}
-#bShop svg{width:22px;height:22px}
-/* --- 上バナー --- */
-#hud #top{min-width:150px;background:linear-gradient(#4aa6d8,#2f84bd)!important;border:3px solid #123a63!important;box-shadow:0 3px 0 rgba(0,0,0,.35),inset 0 3px 0 rgba(255,255,255,.25)!important}
-/* --- ウィンドウにスタッド模様 --- */
-#mp{background-image:radial-gradient(circle,rgba(255,255,255,.16) 5px,rgba(0,0,0,.08) 6px,transparent 7px),linear-gradient(#3ba6ec,#1f78c8)!important;background-size:28px 28px,auto!important;box-shadow:0 0 0 3px #7fd0ff,0 8px 0 rgba(0,0,0,.35)!important}
-#mh{background:none!important;border:0!important;box-shadow:none!important;-webkit-text-stroke:5px var(--nv);paint-order:stroke fill}
-/* --- 再生ウィンドウ --- */
-.rb{display:flex;flex-direction:column;gap:10px;align-items:stretch}
-.rpill{align-self:center;padding:6px 34px;border-radius:12px;background:linear-gradient(#ffe27a,#f2b01c);border:4px solid var(--nv);font-size:22px;-webkit-text-stroke:5px var(--nv);paint-order:stroke fill;box-shadow:inset 0 4px 0 rgba(255,255,255,.5)}
-.rrow{display:flex;align-items:center;justify-content:center;gap:8px}
-.slab{flex:1;text-align:center;padding:8px 4px;border:4px solid var(--nv);border-radius:12px;background:radial-gradient(circle,rgba(255,255,255,.2) 3px,transparent 4px) 0 0/16px 16px,linear-gradient(#5fcf55,#34953a);box-shadow:inset 0 4px 0 rgba(255,255,255,.3)}
-.slab small{display:block;font-size:11px;-webkit-text-stroke:3px var(--nv);paint-order:stroke fill}.slab b{font-size:24px;-webkit-text-stroke:5px var(--nv);paint-order:stroke fill}
-.rar{width:0;height:0;border:16px solid transparent;border-left:26px solid #fff;border-right:0;filter:drop-shadow(0 0 0 var(--nv)) drop-shadow(2px 0 0 var(--nv)) drop-shadow(-1px 0 0 var(--nv)) drop-shadow(0 2px 0 var(--nv)) drop-shadow(0 -2px 0 var(--nv))}
-.rsm{text-align:center;font-size:12px;-webkit-text-stroke:3px var(--nv);paint-order:stroke fill}
-.rwarn{text-align:center;font-size:13px;color:#ffd0d0;-webkit-text-stroke:3px var(--nv);paint-order:stroke fill}
-.rbar{position:relative;height:32px;border:4px solid var(--nv);border-radius:8px;background:#173f78;overflow:hidden}
-.rbar i{position:absolute;inset:0 auto 0 0;background:linear-gradient(#8fe0ff,#2a8ae0)}
-.rbar span{position:absolute;inset:0;display:grid;place-items:center;font-size:15px;-webkit-text-stroke:4px var(--nv);paint-order:stroke fill}
-.rreq{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
-.rreq span{font-size:12px;padding:2px 8px;border-radius:8px;border:3px solid var(--nv);-webkit-text-stroke:3px var(--nv);paint-order:stroke fill}
-.rreq .y{background:#2fae3f}.rreq .n{background:#c9303a}
-.rgo{width:100%;height:56px;font-size:22px}
-/* --- レベルロード(シーズンパス風トラック) --- */
-.sph{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 10px;border-radius:12px;background:linear-gradient(#58c4ff,#2b97e6);border:4px solid var(--nv);margin-bottom:10px}
-.sph big{display:block;font-size:26px;line-height:1;color:#ffa21f;-webkit-text-stroke:6px var(--nv);paint-order:stroke fill}
-.sph small{display:block;font-size:11px;color:#0b3a55;-webkit-text-stroke:0;font-weight:800}
-.spe{text-align:center;padding:4px 10px;border-radius:10px;background:#1b6fc0;border:3px solid var(--nv);font-size:11px;-webkit-text-stroke:3px var(--nv);paint-order:stroke fill}.spe b{display:block;font-size:20px;color:#ffd34d}
-.spg{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:8px;font-size:16px;-webkit-text-stroke:4px var(--nv);paint-order:stroke fill}.spg .b{padding:2px 12px;font-size:16px}
-.spt{display:grid;grid-template-columns:repeat(10,1fr);gap:0}
-.spt>div{display:flex;justify-content:center;align-items:flex-end;min-height:48px}
-.spb{background:#111;border-radius:14px;margin:4px 0;padding:4px 0;align-items:center!important;min-height:0!important}
-.rnb{width:calc(100% - 4px);aspect-ratio:1;max-width:32px;display:grid;place-items:center;border-radius:9px;background:linear-gradient(#ffc13d,#f08a00);border:3px solid #fff3d0;font-size:13px;-webkit-text-stroke:3px #5a2c00;paint-order:stroke fill}
-.rnb.ok{box-shadow:0 0 0 2px #4cff4c}.rnb.cur{outline:3px solid #fff}
-.spx{background:linear-gradient(#ffb02e,#f08a00);border:3px solid var(--nv);border-radius:12px;margin-top:4px;padding:2px 0 4px}
-.spx>div{align-items:center!important}
-.sps{font-size:11px;margin:6px 0 2px;color:#fff;-webkit-text-stroke:3px var(--nv);paint-order:stroke fill}
-.rt{position:relative;width:calc(100% - 4px);aspect-ratio:1;max-width:38px;border-radius:8px;background:#111;border:2px solid #111;display:grid;place-items:center}
-.spx .rt{border-radius:50%;background:#fff;border-color:#fff}
-.rt .ri2{width:78%;height:78%;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ff7ad8,#9a1fb0);display:grid;place-items:center}
-.rt img{width:70%;height:70%}
-.rt em{position:absolute;left:50%;bottom:-13px;transform:translateX(-50%);font-style:normal;font-size:9px;-webkit-text-stroke:3px var(--nv);paint-order:stroke fill;white-space:nowrap;z-index:2}
-.rt s{position:absolute;inset:0;display:grid;place-items:center;background:rgba(0,0,0,.55);border-radius:inherit;text-decoration:none;font-size:15px;-webkit-text-stroke:0}
-.rt.got s{color:#6dff6d;font-size:20px}
-.rt.rdy{animation:rdy .6s infinite alternate;box-shadow:0 0 0 3px #4cff4c,0 0 12px #4cff4c;cursor:pointer}
-@keyframes rdy{to{transform:scale(1.12)}}
-.rt.none{visibility:hidden}
-.spf{display:flex;gap:8px;margin-top:22px}
-.spbuy{flex:1.2;font-size:15px;height:54px;line-height:1.1}.spbuy:disabled{filter:grayscale(1) brightness(.8)}
-.spn{flex:1;display:grid;place-items:center;text-align:center;border-radius:14px;background:linear-gradient(#ffb02e,#f08a00);border:4px solid var(--nv);font-size:14px;line-height:1.2;-webkit-text-stroke:4px var(--nv);paint-order:stroke fill;box-shadow:inset 0 4px 0 rgba(255,255,255,.4)}
-
-/* ===== B23: 重なり・見えにくさ・枠の修正 / 下部レイアウト再設計 ===== */
-/* --- ウィンドウ: 閉じるボタンが切れないよう、外枠は overflow:visible、中身だけスクロール --- */
-#mp{overflow:visible!important;display:flex!important;flex-direction:column;max-height:80vh!important;touch-action:auto!important}
-#mh{position:static!important;top:auto!important;flex:none;margin:0 0 10px!important;padding:2px 40px!important;min-height:44px}
-#mt{font-size:24px;line-height:1.1}
-#mc{flex:1 1 auto;min-height:0;overflow-y:auto;overflow-x:hidden;touch-action:pan-y;-webkit-overflow-scrolling:touch;padding:2px 2px 6px}
-#mClose{position:absolute!important;right:-12px!important;top:-14px!important;width:44px!important;height:44px!important;z-index:3}
-/* --- 文字の読みやすさ --- */
-#mc .sm,#mc .up .sm,.rc small{color:#fff!important;-webkit-text-stroke:0!important;font-weight:800;text-shadow:0 1px 0 #0b2a5a,0 -1px 0 #0b2a5a,1px 0 0 #0b2a5a,-1px 0 0 #0b2a5a,1px 1px 0 #0b2a5a,-1px -1px 0 #0b2a5a}
-#mc .up,#mc .cd,#mc .rc{-webkit-text-stroke:3px #0b2a5a;paint-order:stroke fill}
-#hud #top,#hud #obj{-webkit-text-stroke:3px #10131c}
-/* --- 上部: 左メニュー / 中央バナー / 右ミニマップ が重ならない幅に --- */
-#lcol{width:108px!important}
-#lcol #dock{grid-template-columns:repeat(2,50px)!important;gap:5px!important}
-#lcol #dock button.dk{width:50px!important;height:54px!important}
-#lcol #dock button.dk i{width:28px!important;height:28px!important}
-#lcol #dock button.dk span{font-size:9px!important;-webkit-text-stroke:2px #0b1a33!important}
-#hud #top{width:clamp(96px,calc(100% - 262px),176px)!important;min-width:0!important;max-width:none!important;padding:3px 4px 4px!important;box-sizing:border-box}
-#hud #top #area{font-size:14px;overflow-wrap:anywhere}#hud #top #clock{font-size:11px}#hud #top #rebb{font-size:10px!important}
-#hud #obj{width:134px!important}
-#hud #bBack{top:calc(134px + env(safe-area-inset-top))!important}
-/* 通知文は中央の空きスペースへ(下のボタンと重ならない) */
-#hud #toast{left:134px!important;right:134px!important;bottom:auto!important;top:calc(188px + env(safe-area-inset-top))!important;font-size:14px;line-height:1.25}
-/* --- 下部: 一番下=ホットバー / その上=レベルバー / その上=操作ボタン --- */
-#hud #tools{bottom:calc(12px + env(safe-area-inset-bottom))!important}
-#lvbar{bottom:calc(70px + env(safe-area-inset-bottom));width:min(70%,260px);height:30px}
-#lvbar b{font-size:13px}#lvbar u{font-size:11px}
-#lcol #res{bottom:calc(112px + env(safe-area-inset-bottom));max-width:150px}
-#lcol .cur.coin span{font-size:24px}
-#hud #bJump{right:calc(14px + env(safe-area-inset-right))!important;bottom:calc(112px + env(safe-area-inset-bottom))!important}
-#hud #bTool{right:calc(126px + env(safe-area-inset-right))!important;bottom:calc(112px + env(safe-area-inset-bottom))!important}
-#hud #bDash{right:calc(14px + env(safe-area-inset-right))!important;bottom:calc(226px + env(safe-area-inset-bottom))!important}
-#hud #bRep{right:calc(126px + env(safe-area-inset-right))!important;bottom:calc(212px + env(safe-area-inset-bottom))!important}
-#hud #bCol,#hud #bAct{right:calc(14px + env(safe-area-inset-right))!important;bottom:calc(314px + env(safe-area-inset-bottom))!important}
-/* --- 小さい画面: 左メニューは常に2列のまま、少しだけ小さくする --- */
-@media(max-height:700px){
- #lcol #dock{grid-template-columns:repeat(2,46px)!important;gap:4px!important}
- #lcol #dock button.dk{width:46px!important;height:50px!important}
- #lcol #dock button.dk i{width:26px!important;height:26px!important}
- #hud #bJump,#hud #bTool,#hud #bDash,#hud #bCol,#hud #bAct,#hud #bRep{scale:.84;transform-origin:100% 100%}
-}
-@media(max-height:560px){#lcol #res{display:none}#hud #bShop{display:none}}
 </style></head><body>
 <canvas id="c"></canvas>
 <div id="hud" class="st">
@@ -755,7 +635,7 @@ const EVF=[],gateIn=[0,0],FB=[],FZ=[],PEDC=['#ffd34d','#7fd0ff','#ff9bd6'];let o
 function lb(g,t,x,y,z){const q=tsp(t,'');q.position.set(x,y,z);q.scale.set(4.6,1.7,1);g.add(q)}
 function trendSp(){const d=Math.floor(Date.now()/864e5),e=(typeof EA=='function')?EA():-1;let L=e>=0?SP.filter(q=>q.ev===e&&q.r>=5):SP.filter(q=>q.r>=3&&q.ev==null);return L.length?L[(d*7+3)%L.length]:null}
 function buildBase(g,bl,reb,own=1){g.clear();if(own){FB.length=0;EVF.length=0}const first=own&&!obsB,i=reb%6,WC=['#fff0c2','#bfe8ff','#ffc9e6','#c8ffc0','#ffe27a','#d8c4ff'][i],RF=['#ff3b4a','#2a7bff','#ff3fa0','#1fbf55','#ffb800','#8a3cff'][i],W=BH-1,GD='#ffd34d';
- const ROT={hall:Math.PI/2,lab:Math.PI/2,twork:Math.PI/2,cwork:Math.PI/2,dex:Math.PI/2,cafe:Math.PI/2,board:-Math.PI/2,garage:-Math.PI/2,shop:-Math.PI/2,bank:-Math.PI/2,rank:0,trd:0,home:0,clock:0,fr:Math.PI,lotto:Math.PI,trend:0,gate:0,egate:0},lbs=(p,s,x,y,z,k)=>{const q=tsp(s,'');q.position.set(x,y,z);q.scale.set(4.6*k,1.7*k,1);p.add(q)},
+ const ROT={hall:Math.PI/2,lab:Math.PI/2,twork:Math.PI/2,dex:Math.PI/2,home:Math.PI/2,board:-Math.PI/2,trd:Math.PI/2,cwork:-Math.PI/2,fr:-Math.PI/2,trend:0,clock:-Math.PI/2,shop:-Math.PI/2,gate:0,egate:0},lbs=(p,s,x,y,z,k)=>{const q=tsp(s,'');q.position.set(x,y,z);q.scale.set(4.6*k,1.7*k,1);p.add(q)},
  ico=(p,e,x,y,z,s)=>{const c=icoCan(E2I[e.replace(/️/g,'')]||'star',128);const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:new THREE.CanvasTexture(c),depthTest:false,transparent:true}));sp.position.set(x,y,z);sp.scale.set(s,s,1);sp.renderOrder=4;p.add(sp)};
  {const T=window.__CHK||(window.__CHK=(()=>{const c=document.createElement('canvas');c.width=c.height=2;const x=c.getContext('2d');x.fillStyle='#8cf06c';x.fillRect(0,0,2,2);x.fillStyle='#6fdc58';x.fillRect(0,0,1,1);x.fillRect(1,1,1,1);const t=new THREE.CanvasTexture(c);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.repeat.set(2*BH/16,2*BH/16);t.magFilter=THREE.NearestFilter;t.minFilter=THREE.NearestFilter;return t})());const m=new THREE.Mesh(new THREE.PlaneGeometry(2*BH,2*BH),new THREE.MeshLambertMaterial({map:T}));m.rotation.x=-Math.PI/2;m.position.y=.03;g.add(m)}bx(g,14,.08,97,'#e6dcc0',0,.075,18.5);bx(g,10,.1,97,'#e8374a',0,.09,18.5);bx(g,120,.08,38,'#e6dcc0',0,.078,-47);bx(g,114,.09,32,'#d9cfae',0,.082,-47);bx(g,2*BH,.08,12,'#e6dcc0',0,.075,6);bx(g,2*BH,.1,8,'#e8374a',0,.092,6);bx(g,10,.12,10,'#e8374a',0,.094,6);[-36,36].forEach(x=>{bx(g,6.5,.08,95,'#e6dcc0',x,.077,19.5);bx(g,3.6,.1,95,'#ff8a3a',x,.093,19.5);for(let z=-26;z<=64;z+=4)if(Math.abs(z-6)>5.5)bx(g,.25,.03,1.6,'#fff',x,.15,z);lbs(g,x<0?'西通り':'東通り',x,4.5,-29.5,1.2);[-1,1].forEach(s=>{for(let z=-24;z<=64;z+=8)if(Math.abs(z-6)>6){bx(g,.3,6,.3,'#444',x+s*3.5,3.1,z);bx(g,.9,.3,.9,'#444',x+s*3.5,.15,z);bx(g,1,1,1,'#ffe45c',x+s*3.5,6.5,z,{e:'#fb0'})}})});
  for(let z=-26;z<=66;z+=4){if(Math.abs(z-6)<5.5)continue;bx(g,.4,.03,2,'#ffe45c',0,.158,z)}for(let x=-65;x<=65;x+=4){if(Math.abs(x)<6.5)continue;bx(g,2,.03,.4,'#ffe45c',x,.16,6)}
@@ -790,23 +670,23 @@ q.position.set(x,0,z);q.rotation.y=r?Math.PI/2:0;g.add(q)});
   [-1,1].forEach(s=>bx(h,.2,1.3,1.5,'#9fe0ff',s*(w/2+.05),.7+ht*.55,0,{e:'#39f'}));return y};
  const add=(x,z,id,n,ic,fn,r,cr,ly,ev)=>{const p=ev?new THREE.Group():g;if(ev){g.add(p);p.visible=!!(EV()||EA()>=0);if(own)EVF.push(p)}const h=new THREE.Group();fn(h);h.position.set(x,0,z);h.rotation.y=ROT[id]!=null?ROT[id]:Math.atan2(-x,-z);p.add(h);lbs(p,n,x,ly+1.4,z,1.5);ico(p,ic,x,ly+4.4,z,3.6);if(own&&id)FB.push({x,z,id,n,r,ev});if(first&&cr)obs.push({x,z,r:cr})};
  const bf=(x,z,id,n,ic,w,d,ht,wc,rc,pc,rt,cr,r,ex)=>add(x,z,id,n,ic,h=>{const y=B(h,w,d,ht,wc,rc,pc,rt);ex&&ex(h,y)},r,cr,ht+4);
- bf(0,-20,'home','ホーム','🏠',12,8,5,WC,RF,'#ffb347',0,6,9,(h,y)=>{bx(h,1.2,2.6,1.2,'#8a4a3a',3.6,y+2.4,-1.4);bx(h,1.7,.4,1.7,'#5a3a2a',3.6,y+3.8,-1.4);bx(h,.3,3.4,.3,'#6b4423',-5.2,y+1.7,1);bx(h,1.9,1.1,.1,GD,-4.2,y+2.9,1,{e:'#fb0'});
+ bf(-17,-12,'home','ホーム','🏠',12,8,5,WC,RF,'#ffb347',0,6,9,(h,y)=>{bx(h,1.2,2.6,1.2,'#8a4a3a',3.6,y+2.4,-1.4);bx(h,1.7,.4,1.7,'#5a3a2a',3.6,y+3.8,-1.4);bx(h,.3,3.4,.3,'#6b4423',-5.2,y+1.7,1);bx(h,1.9,1.1,.1,GD,-4.2,y+2.9,1,{e:'#fb0'});
   for(let k=0;k<bl;k++){const sd=k%2?1:-1,q=(k>>1)+1,x=sd*(7.4+q*3.4);bx(h,3.2,2+q*1.1,4.2,WC,x,.7+(2+q*1.1)/2,0);bx(h,3.8,.6,4.8,RF,x,.7+2+q*1.1+.3,0)}
   for(let k=0;k<reb;k++)bx(h,.4,1.5+k*.3,.4,GD,-3+k*.9,y+3.4+k*.1,0,{e:'#fb0'})});
  bf(-50,-22,'hall','展示ホール','🖼',9,8,5,'#fff4c9','#d4a017','#ffd34d',1,6,8,(h,y)=>{for(let k=0;k<4;k++)bx(h,.8,5,.8,'#fff',-3.6+k*2.4,3.2,5.2);bx(h,9.6,.5,1.2,GD,0,5.9,5.2);bx(h,3.2,1.8,3.2,GD,0,y+1.4,0,{e:'#fb0'});bx(h,1.4,1.4,1.4,'#fff6c0',0,y+3.1,0,{e:'#fb0'})});
  bf(-50,-6,'lab','研究所','🔬',8,8,6,'#d6f1ff','#1f78d1','#3fd0ff',1,6,8,(h,y)=>{bx(h,.4,4,.4,'#bbb',2,y+2.4,0);bx(h,2.2,2.2,2.2,'#7ff6ff',-1.4,y+1.6,0,{e:'#0aa'});bx(h,1,1,1,'#fff',2,y+4.6,0,{e:'#0ff'});[-1,1].forEach(s=>{bx(h,1.6,3.2,1.6,'#e8f4ff',s*5.2,1.9,-1.5);bx(h,1.8,.4,1.8,'#1f78d1',s*5.2,3.7,-1.5)})});
- bf(-50,26,'cwork','運搬工房','🛠',9,7,4,'#c99a63','#6b4423','#c68642',0,5.5,7,(h,y)=>{bx(h,2.4,.3,2.4,'#8a5a2b',-2,.9,5.4);bx(h,2.4,.4,.15,'#6b4423',-2,1.3,6.6);bx(h,2.4,.4,.15,'#6b4423',-2,1.3,4.2);[[-3,6],[-1,6],[-3,4.8],[-1,4.8]].forEach(([x,z])=>bx(h,.4,.8,.8,'#2a2f35',x,.55,z));bx(h,1.6,1.6,1.6,'#a8783f',3.2,1.5,5.2);bx(h,1.6,1.6,1.6,'#a8783f',3.2,3.1,5.2);bx(h,3.2,1,.5,'#8a8f98',5.8,2.4,.5);bx(h,1,3.2,.5,'#8a8f98',5.8,2.4,.5);bx(h,2.3,2.3,.5,'#aab0b8',5.8,2.4,.5)});
- bf(-50,10,'twork','道具工房','🔧',8,7,4,'#9aa0aa','#c0392b','#ff7043',1,5,7,(h,y)=>{bx(h,1.4,2.6,1.4,'#6a4a3a',-2.6,y+1.3,-1.2);bx(h,1.7,.4,1.7,'#444',-2.6,y+2.7,-1.2);bx(h,.9,.9,.9,'#ffb830',-2.6,y+3.4,-1.2,{e:'#f80'});bx(h,1.8,.7,1.1,'#444',3,.9,5.2);bx(h,2.4,.4,1.4,'#333',3,1.4,5.2);bx(h,.35,.35,.35,'#ffb830',3,1.9,5.2,{e:'#f80'});bx(h,.3,1.8,.3,'#6b4423',-3.2,1.5,5);bx(h,.3,1.8,.3,'#6b4423',-1.4,1.5,5);bx(h,2.2,.3,.3,'#aaa',-2.3,2.3,5)});
+ bf(-22,24,'cwork','運搬工房','🛠',9,7,4,'#c99a63','#6b4423','#c68642',0,5.5,7,(h,y)=>{bx(h,2.4,.3,2.4,'#8a5a2b',-2,.9,5.4);bx(h,2.4,.4,.15,'#6b4423',-2,1.3,6.6);bx(h,2.4,.4,.15,'#6b4423',-2,1.3,4.2);[[-3,6],[-1,6],[-3,4.8],[-1,4.8]].forEach(([x,z])=>bx(h,.4,.8,.8,'#2a2f35',x,.55,z));bx(h,1.6,1.6,1.6,'#a8783f',3.2,1.5,5.2);bx(h,1.6,1.6,1.6,'#a8783f',3.2,3.1,5.2);bx(h,3.2,1,.5,'#8a8f98',5.8,2.4,.5);bx(h,1,3.2,.5,'#8a8f98',5.8,2.4,.5);bx(h,2.3,2.3,.5,'#aab0b8',5.8,2.4,.5)});
+ bf(-50,24,'twork','道具工房','🔧',8,7,4,'#9aa0aa','#c0392b','#ff7043',1,5,7,(h,y)=>{bx(h,1.4,2.6,1.4,'#6a4a3a',-2.6,y+1.3,-1.2);bx(h,1.7,.4,1.7,'#444',-2.6,y+2.7,-1.2);bx(h,.9,.9,.9,'#ffb830',-2.6,y+3.4,-1.2,{e:'#f80'});bx(h,1.8,.7,1.1,'#444',3,.9,5.2);bx(h,2.4,.4,1.4,'#333',3,1.4,5.2);bx(h,.35,.35,.35,'#ffb830',3,1.9,5.2,{e:'#f80'});bx(h,.3,1.8,.3,'#6b4423',-3.2,1.5,5);bx(h,.3,1.8,.3,'#6b4423',-1.4,1.5,5);bx(h,2.2,.3,.3,'#aaa',-2.3,2.3,5)});
  bf(50,-6,'board','ミッション','📋',7,4,4,'#d8b27a','#8a5a2b','#9be564',2,4.5,6.5,(h,y)=>{bx(h,6.2,2.8,.3,'#c9a36a',0,3.1,2.35);[-2,0,2].forEach((x,k)=>{bx(h,1.5,1.9,.12,'#fff',x,3.2,2.55);bx(h,.35,.35,.1,['#e33','#3a3','#33e'][k],x,4.2,2.65)})});
- bf(36,-22,'trd','交換所','🔄',8,5,4,'#a8783f','#2a8ae0','#4aa8ff',2,5,6.5,(h,y)=>{bx(h,1.6,1.6,.15,GD,0,y+1.6,2.7,{e:'#fb0'});bx(h,1.2,1.2,1.2,'#8a5a2b',-3.4,1.3,4);bx(h,1.2,1.2,1.2,'#8a5a2b',3.4,1.3,4);bx(h,.9,.9,.9,'#4aa8ff',-3.4,2.4,4,{e:'#39f'});bx(h,.9,.9,.9,GD,3.4,2.4,4,{e:'#fb0'})});
- bf(-36,58,'fr','フレンド広場','🤝',8,6,4,'#ffe0f0','#e0559b','#ff8fd0',2,5,6.5,(h,y)=>{[-1,1].forEach(s=>{bx(h,.3,5.5,.3,'#6b4423',s*5,2.8,3);bx(h,2,1.2,.15,s>0?'#ff6bd6':'#6bd6ff',s*6,4.9,3,{e:s>0?'#f0a':'#39f'})});bx(h,2.4,.5,1,'#8a5a2b',0,.9,5);bx(h,.8,.8,.8,'#3aa0ff',3.4,1.1,5)});
- bf(0,20,'clock','時計台','🕰',5,5,11,'#e5e9ef','#566178','#b9c2d0',0,3.5,6,(h,y)=>{[2.55,-2.55].forEach(z=>{bx(h,3.2,3.2,.2,'#fff',0,9,z);bx(h,.2,1.3,.12,'#222',0,9.4,z*1.05);bx(h,.9,.2,.12,'#222',.4,9,z*1.05)});[1,-1].forEach(s=>bx(h,.2,3.2,3.2,'#fff',s*2.55,9,0));bx(h,.9,.9,.9,GD,0,y+3.4,0,{e:'#fb0'})});
- bf(-50,41,'dex','図鑑端末','📖',4,3,3,'#5a6280','#2f3a66','#7fd0ff',1,3,5,(h,y)=>{bx(h,3.2,1.8,.2,'#7fd0ff',0,2.3,1.65,{e:'#39f'});bx(h,2.6,1.2,.1,'#fff',0,2.3,1.78,{e:'#8cf'})});
- bf(50,26,'shop','ショップ','🛒',6,4,4,'#fff6ea','#e33','#ff5a5a',2,4.2,6,(h,y)=>{['#e33','#ffb830','#7be36b','#b85cff'].forEach((c,k)=>bx(h,.9,.9,.9,c,-2.7+k*1.8,1.1,3.9));bx(h,1.6,1.6,.15,GD,0,y+1.3,2.3,{e:'#fb0'})});
- bf(-36,-22,'rank','ランキング塔','🏆',6,6,12,'#fff4c9','#d4a017','#ffd34d',0,6,8,(h,y)=>{bx(h,2.4,2.4,2.4,GD,0,y+2,0,{e:'#fb0'});bx(h,1.2,1.2,1.2,'#fff6c0',0,y+4,0,{e:'#fb0'});[-1,1].forEach(s=>bx(h,.8,5,.8,'#fff',s*3.6,3.2,3.4))});
- bf(50,10,'garage','整備工場','🔧',8,6,4,'#c9d2dc','#ff7a1a','#ffd34d',2,5,7,(h,y)=>{[0,1,2].forEach(k=>bx(h,1.6,.7,1.6,'#222',-3.4,.8+k*.7,4.2));bx(h,.4,2.6,.4,'#ccc',3.4,2,4.2);bx(h,1.8,.6,.4,'#ff3b4a',3.4,3.5,4.2,{e:'#f22'});bx(h,2.6,2,.2,'#ffe14d',0,y+1.2,2.6,{e:'#fb0'})});
- bf(36,58,'lotto','ラッキーくじ','🎰',6,5,5,'#ffd0ef','#b02aff','#ff5fd0',1,5,7,(h,y)=>{bx(h,3.4,2.4,.4,'#2a1a5a',0,y+2,2.4);[-1,0,1].forEach((s,k)=>bx(h,.8,1.4,.2,['#ff3b4a','#ffe14d','#3ddf5a'][k],s*1,y+2,2.7,{e:['#f22','#fb0','#0a4'][k]}));bx(h,1.4,1.4,1.4,'#ffd34d',3.8,1.4,3.6,{e:'#fb0'})});
- bf(-50,56,'cafe','カフェ','☕',7,5,4,'#fff0dc','#ff6aa0','#ffd6e8',2,5,6.5,(h,y)=>{[-2,2].forEach(s=>{bx(h,1.8,.2,1.8,'#fff',s*1.6,1.4,4.4);bx(h,.2,1.2,.2,'#8a5a2b',s*1.6,.7,4.4);bx(h,.8,.5,.8,'#6b3a1a',s*1.6,1.75,4.4)});bx(h,.2,3.4,.2,'#ddd',3.6,1.7,4.8);bx(h,3,.4,3,'#ff6aa0',3.6,3.5,4.8)});
+ bf(22,24,'trd','交換所','🔄',8,5,4,'#a8783f','#2a8ae0','#4aa8ff',2,5,6.5,(h,y)=>{bx(h,1.6,1.6,.15,GD,0,y+1.6,2.7,{e:'#fb0'});bx(h,1.2,1.2,1.2,'#8a5a2b',-3.4,1.3,4);bx(h,1.2,1.2,1.2,'#8a5a2b',3.4,1.3,4);bx(h,.9,.9,.9,'#4aa8ff',-3.4,2.4,4,{e:'#39f'});bx(h,.9,.9,.9,GD,3.4,2.4,4,{e:'#fb0'})});
+ bf(-22,40,'fr','フレンド広場','🤝',8,6,4,'#ffe0f0','#e0559b','#ff8fd0',2,5,6.5,(h,y)=>{[-1,1].forEach(s=>{bx(h,.3,5.5,.3,'#6b4423',s*5,2.8,3);bx(h,2,1.2,.15,s>0?'#ff6bd6':'#6bd6ff',s*6,4.9,3,{e:s>0?'#f0a':'#39f'})});bx(h,2.4,.5,1,'#8a5a2b',0,.9,5);bx(h,.8,.8,.8,'#3aa0ff',3.4,1.1,5)});
+ bf(17,-12,'clock','時計台','🕰',5,5,11,'#e5e9ef','#566178','#b9c2d0',0,3.5,6,(h,y)=>{[2.55,-2.55].forEach(z=>{bx(h,3.2,3.2,.2,'#fff',0,9,z);bx(h,.2,1.3,.12,'#222',0,9.4,z*1.05);bx(h,.9,.2,.12,'#222',.4,9,z*1.05)});[1,-1].forEach(s=>bx(h,.2,3.2,3.2,'#fff',s*2.55,9,0));bx(h,.9,.9,.9,GD,0,y+3.4,0,{e:'#fb0'})});
+ bf(-50,38,'dex','図鑑端末','📖',4,3,3,'#5a6280','#2f3a66','#7fd0ff',1,3,5,(h,y)=>{bx(h,3.2,1.8,.2,'#7fd0ff',0,2.3,1.65,{e:'#39f'});bx(h,2.6,1.2,.1,'#fff',0,2.3,1.78,{e:'#8cf'})});
+ bf(50,24,'shop','ショップ','🛒',6,4,4,'#fff6ea','#e33','#ff5a5a',2,4.2,6,(h,y)=>{['#e33','#ffb830','#7be36b','#b85cff'].forEach((c,k)=>bx(h,.9,.9,.9,c,-2.7+k*1.8,1.1,3.9));bx(h,1.6,1.6,.15,GD,0,y+1.3,2.3,{e:'#fb0'})});
+ bf(-26,-25,'rank','ランキング塔','🏆',6,6,12,'#fff4c9','#d4a017','#ffd34d',0,6,8,(h,y)=>{bx(h,2.4,2.4,2.4,GD,0,y+2,0,{e:'#fb0'});bx(h,1.2,1.2,1.2,'#fff6c0',0,y+4,0,{e:'#fb0'});[-1,1].forEach(s=>bx(h,.8,5,.8,'#fff',s*3.6,3.2,3.4))});
+ bf(26,-25,'garage','整備工場','🔧',8,6,4,'#c9d2dc','#ff7a1a','#ffd34d',2,5,7,(h,y)=>{[0,1,2].forEach(k=>bx(h,1.6,.7,1.6,'#222',-3.4,.8+k*.7,4.2));bx(h,.4,2.6,.4,'#ccc',3.4,2,4.2);bx(h,1.8,.6,.4,'#ff3b4a',3.4,3.5,4.2,{e:'#f22'});bx(h,2.6,2,.2,'#ffe14d',0,y+1.2,2.6,{e:'#fb0'})});
+ bf(22,40,'lotto','ラッキーくじ','🎰',6,5,5,'#ffd0ef','#b02aff','#ff5fd0',1,5,7,(h,y)=>{bx(h,3.4,2.4,.4,'#2a1a5a',0,y+2,2.4);[-1,0,1].forEach((s,k)=>bx(h,.8,1.4,.2,['#ff3b4a','#ffe14d','#3ddf5a'][k],s*1,y+2,2.7,{e:['#f22','#fb0','#0a4'][k]}));bx(h,1.4,1.4,1.4,'#ffd34d',3.8,1.4,3.6,{e:'#fb0'})});
+ bf(-50,54,'cafe','カフェ','☕',7,5,4,'#fff0dc','#ff6aa0','#ffd6e8',2,5,6.5,(h,y)=>{[-2,2].forEach(s=>{bx(h,1.8,.2,1.8,'#fff',s*1.6,1.4,4.4);bx(h,.2,1.2,.2,'#8a5a2b',s*1.6,.7,4.4);bx(h,.8,.5,.8,'#6b3a1a',s*1.6,1.75,4.4)});bx(h,.2,3.4,.2,'#ddd',3.6,1.7,4.8);bx(h,3,.4,3,'#ff6aa0',3.6,3.5,4.8)});
  bf(50,56,'bank','ぎんこう','🏦',7,6,5,'#e4ffe0','#1fbf55','#ffe14d',1,5,7,(h,y)=>{[-2.4,-.8,.8,2.4].forEach(x=>bx(h,.8,4.4,.8,'#fff',x,2.9,3.4));bx(h,6.4,.6,1.4,GD,0,5.4,3.4,{e:'#fb0'});bx(h,1.6,1.6,.3,GD,0,y+2,3.3,{e:'#fb0'})});
  add(-19,56,'gate','探索ゲート','🗺',h=>{bx(h,16,.3,6,'#2a4a8a',0,.15,0);[-6,6].forEach(s=>{bx(h,2,10,2,'#6f6a60',s,5,0);bx(h,2.6,.8,2.6,'#8c8575',s,.4,0);bx(h,2.6,.8,2.6,GD,s,10.2,0);bx(h,1,1,1,'#7ff6ff',s,11.2,0,{e:'#0aa'})});bx(h,14,1.6,2,'#6f6a60',0,10.8,0);bx(h,14.4,.4,2.3,GD,0,11.8,0);for(let k=-3;k<=3;k++)bx(h,.7,1.2+(k==0?1:0),.7,GD,k*2,12.6,0,{e:'#fb0'});[-6,6].forEach(s=>{bx(h,3.2,.5,3.2,GD,s,.9,0);bx(h,1.2,1.2,1.2,'#ff7a3a',s,12.4,0,{e:'#f60'})});bx(h,10,9,.4,'#3aa0ff',0,5.4,0,{a:.5,e:'#3aa0ff'});bx(h,6,5,.2,'#9fe8ff',0,5.4,0,{a:.35,e:'#6fd6ff'})},8,0,12);
  add(19,56,'egate','イベントゲート','🎪',h=>{const c=EV()?'#ff6bd6':'#555a66';bx(h,8,.3,5,c,0,.15,0);[-3,3].forEach(s=>{bx(h,1.4,7,1.4,'#6f6a60',s,3.5,0);bx(h,1.9,.6,1.9,c,s,7.2,0,{e:c})});bx(h,7.4,1,1.4,'#6f6a60',0,7.4,0);bx(h,5.4,6,.3,c,0,3.9,0,{a:.55,e:c})},6,0,8);
@@ -817,7 +697,7 @@ q.position.set(x,0,z);q.rotation.y=r?Math.PI/2:0;g.add(q)});
   const sp=trendSp();if(sp){const m=mk(sp,1.25);m.h.position.y=1.3;h.add(m.h);const q=nameTag(sp,0);q.position.set(0,8.6,0);q.scale.set(5.4,1.7,1);h.add(q);DTAGS.push(q);if(own)TRD={g:m.g,sp}}},8,6.5,11);
  const put=(x,z,fn)=>{const h=new THREE.Group();fn(h);h.position.set(x,0,z);g.add(h)};
  if(S.deco.f)put(0,-42,h=>{bx(h,3.6,.5,3.6,'#9aa5b0',0,.25,0);bx(h,3,.3,3,'#6fd6ff',0,.6,0,{a:.8,e:'#39f'});bx(h,.5,1.8,.5,'#9aa5b0',0,1.2,0);bx(h,1,.3,1,'#9fe8ff',0,2.2,0,{e:'#39f'})});
- if(S.deco.l)[-24,-12,12,24].forEach(x=>[1.2,10.8].forEach(z=>put(x,z,h=>{bx(h,.25,2.8,.25,'#555',0,1.4,0);bx(h,.8,.8,.8,'#ffe45c',0,3.2,0,{e:'#fb0'})})));
+ if(S.deco.l)[-62,-56,-44,-24,-12,12,24,44,56,62].forEach(x=>[1.2,10.8].forEach(z=>put(x,z,h=>{bx(h,.25,2.8,.25,'#555',0,1.4,0);bx(h,.8,.8,.8,'#ffe45c',0,3.2,0,{e:'#fb0'})})));
  if(S.deco.g)[[-28,-18],[28,-18]].forEach(([x,z])=>put(x,z,h=>{bx(h,3,.4,3,'#6b4423',0,.2,0);for(let k=0;k<7;k++)bx(h,.4,.5,.4,['#ff6aa0','#ffe45c','#fff','#c9a0ff'][k%4],(Math.random()-.5)*2.4,.6,(Math.random()-.5)*2.4)}));
  if(first){for(let k=-5;k<=5.01;k+=1.2)obs.push({x:k,z:-W,r:.9,h:1.7});for(let k=-W;k<=W;k+=1.2)[[k,-W],[k,W],[-W,k],[W,k]].forEach(([x,z])=>{if(Math.abs(Math.abs(x)==W?z-6:x)<5.6)return;obs.push({x,z,r:.9,h:1.7})});[[-1,-1],[1,-1],[-1,1],[1,1]].forEach(([a,b])=>obs.push({x:a*W,z:b*W,r:2.6}));[[-5,W],[5,W],[-W,1],[-W,11],[W,1],[W,11]].forEach(([x,z])=>obs.push({x,z,r:1.1}));[[-25,56,1.3],[-13,56,1.3],[16,56,1.1],[22,56,1.1]].forEach(([x,z,r])=>obs.push({x,z,r}))}
  if(own)obsB=1}
@@ -2090,106 +1970,5 @@ addEventListener('pageshow',()=>{if(hid&&Date.now()-hid>=AR_MS)doReload();hid=0;
 setInterval(()=>{const n=Date.now();if(!document.hidden&&n-lastT>AR_MS)doReload();lastT=n},5000);
 })();
 requestAnimationFrame(loop);
-
-/* ===== B22: 参考画像ベースのUI第2弾 (左メニュー/レベルバー/再生窓/レベルロード/スタッド床) ===== */
-(()=>{try{
-const O='#10131c',svg=b=>`<svg viewBox="0 0 32 32" stroke="${O}" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round">${b}</svg>`;
-const ICON={
- dex:svg('<rect x="6" y="4" width="20" height="24" rx="3" fill="#3fb54a"/><rect x="10" y="8" width="12" height="9" fill="#eaffe0"/><path d="M10 21h12M10 25h8" fill="none"/>'),
- reb:svg('<circle cx="16" cy="16" r="12" fill="#fff"/><path d="M9 14a8 8 0 0 1 14-3" fill="none" stroke="#2a76f0" stroke-width="3.4"/><path d="M23 18a8 8 0 0 1-14 3" fill="none" stroke="#e8481c" stroke-width="3.4"/><path d="M24 5v7h-7z" fill="#2a76f0"/><path d="M8 27v-7h7z" fill="#e8481c"/>'),
- road:svg('<path d="M9 5h14v8a7 7 0 0 1-14 0z" fill="#ffd34d"/><path d="M9 8H4c0 5 2 7 5 7M23 8h5c0 5-2 7-5 7" fill="none"/><path d="M16 20v5M10 28h12" fill="none"/>'),
- mini:svg('<circle cx="16" cy="16" r="12" fill="#ffd34d"/><circle cx="16" cy="16" r="6.5" fill="#f5a800"/>'),
- notif:svg('<path d="M7 24c2-2 3-4 3-8a6 6 0 0 1 12 0c0 4 1 6 3 8z" fill="#ffe36b"/><path d="M13 27a3 3 0 0 0 6 0" fill="#ff9f1c"/>'),
- set:svg('<circle cx="16" cy="16" r="10" fill="none" stroke-width="7" stroke-dasharray="4 4.2" stroke="#10131c"/><circle cx="16" cy="16" r="8" fill="#dfe5ee"/><circle cx="16" cy="16" r="3.5" fill="#5d6878"/>'),
- quest:svg('<rect x="7" y="4" width="18" height="24" rx="3" fill="#fff"/><path d="M11 10h10M11 15h10M11 20h6" fill="none"/>'),
- shop:svg('<path d="M4 12h24l-3 14H7z" fill="#fff"/><path d="M10 12l5-8M22 12l-5-8" fill="none"/>')};
-const dock=$('dock'),lcol=$('lcol');
-lcol.appendChild(dock);
-/* 再生タイル */
-{const d=document.createElement('button');d.className='b c dk';d.dataset.t='reb';d.innerHTML='<i></i><span></span>';d.onpointerdown=()=>openMenu('reb');dock.insertBefore(d,dock.querySelector('[data-t=dex]')?dock.querySelector('[data-t=dex]').nextSibling:null)}
-const paint=()=>dock.querySelectorAll('.dk').forEach(b=>{const i=b.querySelector('i');if(i&&ICON[b.dataset.t]&&!i.firstChild)i.innerHTML=ICON[b.dataset.t];if(b.dataset.t=='reb')b.querySelector('span').textContent='再生['+(S.reb|0)+']'});
-paint();setInterval(paint,600);
-/* 赤いショップボタン */
-{const b=document.createElement('button');b.id='bShop';b.className='b r';b.innerHTML=ICON.shop+'ショップ';b.onpointerdown=()=>openMenu('shop');$('hud').appendChild(b)}
-/* 下部レベルバー */
-{const v=document.createElement('div');v.id='lvbar';v.innerHTML='<i></i><b></b><u></u>';v.style.cssText='';v.onpointerdown=()=>openMenu('road');$('hud').appendChild(v);
- const f=v.querySelector('i'),a=v.querySelector('b'),n=v.querySelector('u');
- setInterval(()=>{try{const L=S.lv|0,lo=18*(L-1)*(L-1),hi=18*L*L,x=Math.max(0,Math.min(hi-lo,(S.xp|0)-lo));f.style.width=(x/(hi-lo)*100)+'%';a.textContent='レベル '+L;n.textContent=x+' / '+(hi-lo)}catch(e){}},300)}
-/* 再生ウィンドウ */
-const bindA=m=>m.querySelectorAll('[data-a]').forEach(b=>b.onclick=()=>act(b.dataset.a,b.dataset.v,b.dataset.w));
-function rebT(m){const n=S.reb|0,q=rebReq(n),nx=Math.min(n+1,DSLOTS.length-1),nm=id=>(SP.find(x=>x.id==id)||{n:id}).n,
- own=q.k.filter(id=>S.owned[id]>0).length,c1=S.bl>=4,c2=S.coins>=q.c,tot=q.k.length+2,have=own+(c1?1:0)+(c2?1:0),ok=have===tot,yn=(f,t)=>`<span class="${f?'y':'n'}">${f?'✔':'✖'} ${t}</span>`;
- m.innerHTML=`<div class="rb"><div class="rpill">再生 ${n+1} 回目</div>
- <div class="rrow"><div class="slab"><small>いまの展示</small><b>${dsN()}体</b></div><div class="rar"></div><div class="slab"><small>再生後</small><b>${DSLOTS[nx]}体</b></div></div>
- <div class="rsm">報酬 +25% ・ 移動 +10% ・ Rare ×${rebM(2,n+1).toFixed(1)} / Epic ×${rebM(3,n+1).toFixed(1)}</div>
- <div class="rwarn">再生すると手持ちキャラが全員消えます！</div>
- <div class="rbar"><i style="width:${have/tot*100}%"></i><span>条件 ${have} / ${tot}</span></div>
- <div class="rreq">${q.k.map(id=>yn(S.owned[id]>0,nm(id))).join('')}${yn(c1,'基地強化Lv5')}${yn(c2,'🪙'+fmtN(q.c))}</div>
- <button class="b ${ok?'g':'r'} rgo" data-a="reb">${ok?'再生する！':'条件が足りません'}</button></div>`;
- bindA(m);m.querySelectorAll('[data-a]').forEach(b=>{const o=b.onclick;b.onclick=()=>{o();setTimeout(()=>{if(curTab==='reb'&&$('modal').classList.contains('on'))rebT($('mc'))},60)}})}
-/* レベルロード */
-let SPG=-1;
-function roadS(m){if(SPG<0)SPG=Math.min(5,Math.floor(Math.max(0,S.lv-1)/10));const a=SPG*10+1,rdy=lrwReady(),
- nx=ZLV.map((r,i)=>[r,i]).filter(([r,i])=>i>=3&&r>S.lv).sort((x,y)=>x[0]-y[0])[0],
- tile=l=>{if(l<2)return'<div class="rt none"></div>';const r=LRW(l),ok=S.lv>=l,got=S.lrw[l],k=r.s?'star':r.d?'data':'coin',amt=r.s?r.s:r.d?r.d:fmtN(r.c);
-  return`<div class="rt ${got?'got':ok?'rdy':'lock'}" ${ok&&!got?`data-l="${l}"`:''}><span class="ri2"><img src="${iconURL(k)}"></span><em>${amt}</em>${got?'<s>✔</s>':ok?'':'<s>🔒</s>'}</div>`},
- row=f=>Array.from({length:10},(_,k)=>{const l=a+k;return`<div>${f(l)?tile(l):''}</div>`}).join('');
- m.innerHTML=`<div class="sph"><div><big>LEVEL ${SPG+1}</big><small>レベルを上げて報酬をゲット！</small></div><div class="spe">現在<b>Lv${S.lv}</b></div></div>
- <div class="spg"><button class="b c" data-pg="-1">◀</button><span>Lv ${a} – ${a+9}</span><button class="b c" data-pg="1">▶</button></div>
- <div class="spt">${row(l=>l%2==0)}</div>
- <div class="spt spb">${Array.from({length:10},(_,k)=>{const l=a+k;return`<div><div class="rnb ${S.lv>=l?'ok':''} ${S.lv==l?'cur':''}">${l}</div></div>`}).join('')}</div>
- <div class="sps">★ ボーナス報酬（5レベルごとにスター）</div>
- <div class="spt spx">${row(l=>l%2==1)}</div>
- <div class="spf"><button class="b c spbuy" data-a="lrwAll" ${rdy?'':'disabled'}>${rdy?'まとめて受取':'受取済み'}</button><div class="spn">${nx?'Lv'+nx[0]+'で新エリア<br>'+AN[nx[1]].replace(/\n/g,''):'NEXT<br>Lv'+(S.lv+1)}</div></div>`;
- bindA(m);m.querySelectorAll('[data-pg]').forEach(b=>b.onclick=()=>{SPG=Math.max(0,Math.min(5,SPG+(+b.dataset.pg)));roadS(m)});
- m.querySelectorAll('.rt[data-l]').forEach(t=>t.onclick=()=>{act('lrw',t.dataset.l);roadS(m)});
- m.querySelectorAll('[data-a=lrwAll]').forEach(b=>{const o=b.onclick;b.onclick=()=>{o();setTimeout(()=>roadS(m),60)}})}
-const _t22=tab;
-tab=function(t){if(t==='reb'){curTab=t;$('mt').textContent='再生';rebT($('mc'));return}
- if(t==='road'){curTab=t;$('mt').textContent='レベルロード';roadS($('mc'));return}
- return _t22(t)};
-/* レゴ風スタッド床 */
-const studTex=()=>{const c=document.createElement('canvas');c.width=c.height=64;const g=c.getContext('2d');g.fillStyle='#fff';g.fillRect(0,0,64,64);g.strokeStyle='rgba(0,0,0,.1)';g.lineWidth=2;g.strokeRect(1,1,62,62);
- g.fillStyle='rgba(0,0,0,.16)';g.beginPath();g.arc(33,36,16,0,7);g.fill();g.fillStyle='#fff';g.beginPath();g.arc(32,32,16,0,7);g.fill();g.strokeStyle='rgba(0,0,0,.1)';g.stroke();
- const t=new THREE.CanvasTexture(c);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.anisotropy=4;return t};
-const studGround=()=>{const T=studTex();scene.traverse(o=>{if(o.isMesh&&o.geometry&&o.geometry.type==='PlaneGeometry'&&o.material&&o.material.vertexColors&&!o.userData.stud){o.userData.stud=1;const w=o.geometry.parameters.width,t=T.clone();t.needsUpdate=true;t.repeat.set(w/5,w/5);o.material.map=t;o.material.needsUpdate=true}})};
-setTimeout(studGround,1200);setTimeout(studGround,6000);
-}catch(e){console.error('B22',e)}})();
-
-/* ===== B23: 基地を「開けた大型フードコート」型に再配置 =====
- 道ではなく広いタイル床(エリア)が主役。店は外周に並べ、中央は共有ひろば+ランドマーク(時計台)。
- 通路は「つなぎ目」だけ(飛び石タイル)。 西=青タイル / 東=ピンクタイル / 中央=金タイル で場所を覚えやすく */
-(()=>{try{
-const WB='#6fd6ff',PK='#ff8fd0',GL='#ffd34d',GR='#7be36b',TX={};
-const ckTex=(a,b)=>{const k=a+b;if(TX[k])return TX[k];const c=document.createElement('canvas');c.width=c.height=64;const x=c.getContext('2d');x.fillStyle=a;x.fillRect(0,0,64,64);x.fillStyle=b;x.fillRect(0,0,32,32);x.fillRect(32,32,32,32);x.strokeStyle='rgba(0,0,0,.14)';x.lineWidth=2;x.strokeRect(1,1,62,62);x.beginPath();x.moveTo(32,0);x.lineTo(32,64);x.moveTo(0,32);x.lineTo(64,32);x.stroke();const t=new THREE.CanvasTexture(c);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.anisotropy=4;return TX[k]=t};
-function decor23(g,own){
- const D=new THREE.Group();g.add(D);
- const B=(w,h,d,c,x,y,z,o)=>bx(D,w,h,d,c,x,y,z,o),sg=(t,x,y,z,k)=>{const q=tsp(t,'');q.position.set(x,y,z);q.scale.set(10*k,3.75*k,1);D.add(q)};
- const fl=(w,d,x,z,y,a,b,t)=>{const tx=ckTex(a,b).clone();tx.needsUpdate=true;tx.repeat.set(w/(2*t),d/(2*t));const m=new THREE.Mesh(new THREE.PlaneGeometry(w,d),new THREE.MeshLambertMaterial({map:tx}));m.rotation.x=-Math.PI/2;m.position.set(x,y,z);D.add(m)};
- const reg=own&&!window.__d23;if(reg)window.__d23=1;
- /* 大型フードコートの床: 広いチェッカータイル(道は消える) */
- fl(84,82,0,13,.2,'#f6ecd2','#e8d6ac',4);
- /* エリアごとの色タイル: 西=青 / 東=ピンク / 中央=金+赤 */
- fl(12,60,-36,20,.22,'#d6f0ff','#8fd3ff',3);fl(12,60,36,20,.22,'#ffe3f1','#ffa6d6',3);
- fl(26,26,0,20,.24,'#fff2c8','#ffcf5a',3.25);fl(14,14,0,20,.26,'#ffffff','#ff6b6b',3.5);
- /* つなぎ目: エリアの境目に置く飛び石タイル(短い3枚) */
- [[-29,WB],[29,PK]].forEach(([x,c])=>[14,20,26].forEach(z=>{B(2.4,.1,2.4,'#fff6d0',x,.28,z);B(1.6,.12,1.6,c,x,.29,z)}));
- [51,53.5,56].forEach(z=>{B(5,.1,2,'#fff6d0',0,.28,z);B(4,.12,1.2,GL,0,.29,z)});
- /* 看板(高い位置): エリア名を色とセットで */
- sg('つくるエリア',-36,10,20,1);sg('おみせエリア',36,10,20,1);sg('フードコート',0,15.5,20,1.1);
- /* 花壇: 時計台まわり */
- [[-9,11],[9,11],[-9,29],[9,29]].forEach(([x,z])=>{B(3,.8,3,'#8a5a2b',x,.65,z);B(2.6,1.2,2.6,'#2fd44a',x,1.6,z);[[-.8,-.7],[.8,.3],[-.2,.8],[.6,-.8]].forEach(([a,b],k)=>B(.5,.5,.5,['#ff6aa0','#ffe45c','#fff','#c9a0ff'][k],x+a,2.4,z+b))});
- /* フードコート席: 丸テーブル+スツール+パラソル */
- [[-14,20,GL],[14,20,GL],[0,5,GR],[0,35,GR],[-36,8,WB],[-36,20,WB],[-36,32,WB],[36,8,PK],[36,20,PK],[36,32,PK]].forEach(([x,z,c])=>{
-  const y=.3;B(1.8,.15,1.8,'#8a5a2b',x,y+.1,z);B(.4,1.3,.4,'#8a5a2b',x,y+.75,z);B(2.6,.2,2.6,'#fff',x,y+1.5,z);B(.5,.3,.5,'#ff6aa0',x+.5,y+1.75,z);
-  [[1.9,0],[-1.9,0],[0,1.9],[0,-1.9]].forEach(([a,b])=>B(.9,.8,.9,c,x+a,y+.5,z+b));
-  B(.2,3.2,.2,'#ddd',x,y+3.1,z);B(5,.3,5,c,x,y+4.6,z);B(3,.3,3,'#fff',x,y+4.9,z);B(1,.4,1,c,x,y+5.2,z);
-  if(reg)obs.push({x,z,r:2.4})});
- /* 旗のガーランド(広場の上): 北と南 */
- [-8,48].forEach(z=>{[-32,32].forEach(x=>B(.3,6.6,.3,'#8a6a4a',x,3.5,z));for(let k=0;k<17;k++)B(1.1,1,.1,[WB,PK,GL,GR][k%4],-32+k*4,6.5-Math.sin(k/16*Math.PI)*1.4,z)});
-}
-const _b23=buildBase;buildBase=function(g,bl,reb,own=1){const r=_b23(g,bl,reb,own);try{decor23(g,own)}catch(e){console.error('B23',e)}return r};
-setTimeout(()=>{try{buildBase(base,S.bl,S.reb)}catch(e){console.error('B23 rebuild',e)}},300);
-}catch(e){console.error('B23',e)}})();
 </script></body></html>
 	◦
